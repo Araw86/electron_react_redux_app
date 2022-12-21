@@ -6,6 +6,9 @@ const isDev = require('electron-is-dev')
 
 const { autoUpdater } = require("electron-updater")
 
+const ipc = require('./ipc_handlers.js')
+
+
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -14,7 +17,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: true,
-      // preload: path.join(__dirname, 'src/preload/preload.js'),
+      preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
   // win.loadURL(
@@ -43,6 +46,8 @@ function createWindow() {
     //         });
 
     // });
+
+    win.webContents.openDevTools({ mode: "detach" });
   };
   if (!isDev) {
     // autoUpdater.checkForUpdates();
@@ -59,7 +64,7 @@ if (isDev) {
 };
 
 app.on('ready', () => {
-  // ipc.ipc_handlers();
+  ipc.ipc_handlers();
   createWindow();
 });
 

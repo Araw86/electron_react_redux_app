@@ -37,7 +37,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.json', '.node'],
   },
   output: {
     filename: 'app.js',

@@ -1,10 +1,31 @@
-import React from 'react'
+import { Box } from '@mui/material';
+import React, { Component } from "react";
 
-export default function App() {
-  return (
-    <>
-      <h1>I am component</h1>
-      <button>Notify</button>
-    </>
-  )
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { version: null };
+  }
+
+  async componentDidMount() {
+    const version = await window.ipc_handlers.ipc_twoWay({ type: 0 });
+    this.setState({ version: version });
+  }
+  render() {
+
+    return (
+      <Provider store={store}>
+        <Box>
+          test2
+          <br />
+          {this.state.version}
+        </Box>
+      </Provider>
+    );
+  }
 }
+
+export default App;
