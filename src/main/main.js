@@ -1,4 +1,5 @@
 const { app, dialog, BrowserWindow } = require('electron');
+const path = require('path');
 
 const isDev = require('electron-is-dev')
 
@@ -32,6 +33,7 @@ function createWindow() {
 
   // Open the DevTools.
   if (isDev) {
+
     // win.webContents.once("dom-ready", async () => {
     //     await installExtension([REDUX_DEVTOOLS])
     //         .then((name) => console.log(`Added Extension:  ${name}`))
@@ -47,6 +49,14 @@ function createWindow() {
   }
 
 }
+
+// electron reload
+if (isDev) {
+  console.log('test ' + __dirname);
+  require('electron-reload')(path.join(__dirname, '..', '..'), {
+    electron: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron')
+  });
+};
 
 app.on('ready', () => {
   // ipc.ipc_handlers();
