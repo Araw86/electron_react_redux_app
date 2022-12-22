@@ -1,22 +1,22 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+const { IgnorePlugin } = require('webpack');
+
+/* ignore fsevents module which caused error in electron  */
+const optionalPlugins = [];
+if (process.platform !== "darwin") {
+  optionalPlugins.push(new IgnorePlugin({ resourceRegExp: /^fsevents$/ }));
+}
+
 module.exports = {
-  context: path.join(__dirname, 'electron_react_redux_app'),
-  devtool: 'inline-source-map',
   mode: 'development',
+  entry: './src/main/main.js',
   target: 'electron-main',
-  plugins: [
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'src/main', to: 'main' }
-      ]
-    })
-  ],
-  resolve: {
-    extensions: ['.js', '.json', '.node'],
-  },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'build', 'main'),
   },
+  plugins: [
+    ...optionalPlugins,
+  ]
 };

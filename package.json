@@ -25,6 +25,7 @@
     "electron-is-dev": "^2.0.0",
     "electron-reload": "^2.0.0-alpha.1",
     "electron-updater": "^5.3.0",
+    "html-webpack-plugin": "^5.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -33,12 +34,12 @@
   },
   "scripts": {
     "start": "electron .",
-    "watch": "webpack --config webpack.common.js --watch",
-    "app:build": "webpack --config webpack.prod.js",
-    "app:prod_build": "webpack --config webpack.prod.js",
-    "electron:dist": "yarn app:build && electron-builder -c.extraMetadata.main=build/main/main.js",
-    "electron:dist_only": "electron-builder -c.extraMetadata.main=build/main/main.js",
-    "electron:prod": "yarn electron:dist --win --publish always"
+    "watch": "webpack --config webpack.dev.js --watch",
+    "build_dev": "webpack --config webpack.dev.js",
+    "build_prod": "webpack --config webpack.prod.js",
+    "electron:dist": "yarn build_prod && electron-builder -c.extraMetadata.main=build/main/main.js",
+    "build_dist_only": "electron-builder -c.extraMetadata.main=build/main/main.js",
+    "build_dist_github": "yarn build_dist_only --win --publish always"
   },
   "build": {
     "extends": null,

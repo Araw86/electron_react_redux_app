@@ -1,7 +1,17 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const { IgnorePlugin } = require('webpack');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+/* ignore fsevents module which caused error in electron  */
+const optionalPlugins = [];
+if (process.platform !== "darwin") {
+  optionalPlugins.push(new IgnorePlugin({ resourceRegExp: /^fsevents$/ }));
+}
+
+
+module.exports = [{
   mode: 'production',
   entry: './src/renderer/index.js',
   devtool: 'inline-source-map',
@@ -45,10 +55,23 @@ module.exports = {
     path: path.resolve(__dirname, 'build', 'renderer'),
   },
   plugins: [
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'src/main', to: '../main' }
-      ]
+    new HtmlWebpackPlugin({
+      title: 'electron redux app',
+      filename: 'index.html',
+      template: 'src/renderer/index.html'
     })
-  ],
-};
+  ]
+},
+
+{
+  mode: 'production',
+  entry: './src/main/main.js',
+  target: 'electron-main',
+  output: {
+    path: path.resolve(__dirname, 'build', 'main'),
+  },
+  plugins: [
+    ...optionalPlugins,
+  ]
+}
+];
