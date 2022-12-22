@@ -46,7 +46,6 @@
     "appId": "com.example.react_redux_app",
     "productName": "electron react redux app",
     "files": [
-      "dist/**/*",
       "build/**/*",
       "node_modules/**/*",
       "package.json"

@@ -64,6 +64,15 @@ module.exports = [{
 },
 {
   mode: 'development',
+  entry: './src/main/preload/preload.js',
+  target: 'electron-preload',
+  output: {
+    path: path.join(__dirname, 'build', 'main', 'preload'),
+    filename: 'preload.js'
+  }
+},
+{
+  mode: 'development',
   entry: './src/main/main.js',
   target: 'electron-main',
   output: {
