@@ -1,6 +1,13 @@
 {
   "name": "electron_react_redux_app",
-  "version": "1.0.0",
+  "version": "0.0.3",
+  "description": "Testing example for update and stlink access to stm32",
+  "author": "Radek Ripa",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Araw86/electron_react_redux_app"
+  },
   "main": "./src/main/main.js",
   "license": "MIT",
   "dependencies": {
@@ -14,7 +21,6 @@
     "@mui/material": "^5.11.1",
     "@reduxjs/toolkit": "^1.9.1",
     "babel-loader": "^9.1.0",
-    "electron": "^22.0.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-reload": "^2.0.0-alpha.1",
@@ -27,6 +33,42 @@
   },
   "scripts": {
     "start": "electron .",
-    "watch": "webpack --config webpack.common.js --watch"
+    "watch": "webpack --config webpack.common.js --watch",
+    "app:build": "webpack --config webpack.prod.js",
+    "app:prod_build": "webpack --config webpack.prod.js",
+    "electron:dist": "yarn app:build && electron-builder -c.extraMetadata.main=build/main/main.js",
+    "electron:dist_only": "electron-builder -c.extraMetadata.main=build/main/main.js",
+    "electron:prod": "yarn electron:dist --win --publish always"
+  },
+  "build": {
+    "extends": null,
+    "appId": "com.example.react_redux_app",
+    "productName": "electron react redux app",
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "publish": {
+        "provider": "github",
+        "owner": "Araw86",
+        "repo": "electron_react_redux_app"
+      }
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Araw86",
+      "repo": "electron_react_redux_app"
+    }
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0"
   }
 }

@@ -30,11 +30,11 @@ function createWindow() {
     }
   });
 
-  win.loadFile('./src/main/index.html')
 
   // Open the DevTools.
   if (isDev) {
 
+    win.loadFile('./src/main/index.html')
     win.webContents.once("dom-ready", async () => {
       await installExtension([REDUX_DEVTOOLS])
         .then((name) => console.log(`Added Extension:  ${name}`))
@@ -48,7 +48,8 @@ function createWindow() {
     win.webContents.openDevTools({ mode: "detach" });
   };
   if (!isDev) {
-    // autoUpdater.checkForUpdates();
+    win.loadFile(path.join(__dirname, '../main/index.html'))
+    autoUpdater.checkForUpdates();
   }
 
 }
