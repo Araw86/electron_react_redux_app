@@ -1,12 +1,20 @@
-const { app, dialog, BrowserWindow } = require('electron');
+const { app, session, dialog, BrowserWindow } = require('electron');
 const path = require('path');
 
+/*debug*/
 const isDev = require('electron-is-dev')
+const {
+  default: installExtension,
+  REDUX_DEVTOOLS,
+  REACT_DEVELOPER_TOOLS
+} = require("electron-devtools-installer");
 
 
+/*update */
 const { autoUpdater } = require("electron-updater")
 
-const ipc = require('./ipc_handlers.js')
+/*ipc */
+const ipc = require('./ipc_handlers.js');
 
 
 function createWindow() {
@@ -21,32 +29,21 @@ function createWindow() {
       preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
-  // win.loadURL(
-  //   isDev
-  //     ? 'http://localhost:3000'
-  //     : `file://${path.join(__dirname, '../build/index.html')}`
-  // )
-
-  // win.loadURL(
-  //   isDev
-  //     ? './src/main/index.html'
-  //     : `file://${path.join(__dirname, '../src/main/index.html')}`
-  // )
 
   win.loadFile('./src/main/index.html')
 
   // Open the DevTools.
   if (isDev) {
 
-    // win.webContents.once("dom-ready", async () => {
-    //     await installExtension([REDUX_DEVTOOLS])
-    //         .then((name) => console.log(`Added Extension:  ${name}`))
-    //         .catch((err) => console.log("An error occurred: ", err))
-    //         .finally(() => {
-    //             win.webContents.openDevTools({ mode: "detach" });
-    //         });
+    win.webContents.once("dom-ready", async () => {
+      await installExtension([REDUX_DEVTOOLS])
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log("An error occurred: ", err))
+        .finally(() => {
+          win.webContents.openDevTools({ mode: "detach" });
+        });
 
-    // });
+    });
 
     win.webContents.openDevTools({ mode: "detach" });
   };
@@ -56,18 +53,21 @@ function createWindow() {
 
 }
 
-// electron reload
 if (isDev) {
+  // electron reload
   console.log('test ' + __dirname);
   require('electron-reload')(path.join(__dirname, '..', '..'), {
     electron: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron')
   });
+
 };
 
 app.on('ready', () => {
   ipc.ipc_handlers();
   createWindow();
 });
+
+
 
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
