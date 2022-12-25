@@ -14,8 +14,10 @@ contextBridge.exposeInMainWorld('versions', {
 });
 
 contextBridge.exposeInMainWorld('ipc_handlers', {
-  ipc_twoWay: async (data) => {
-    return await ipcRenderer.invoke('app', data);
-  }
+  ipcTwoWay: async (data) => {
+    return ipcRenderer.invoke('app', data);
+  },
+  ipcToMain: (text) => ipcRenderer.send('write-message', text),
   // we can also expose variables, not just functions
+  ipcToRenderer: (callback) => ipcRenderer.on('receive-msg', callback)
 });

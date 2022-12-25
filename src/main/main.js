@@ -1,4 +1,4 @@
-const { app, session, dialog, BrowserWindow } = require('electron');
+const { app, session, dialog, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
 /*debug*/
@@ -29,7 +29,25 @@ function createWindow() {
       preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
+  /* menu to test ipcToRenderer */
+  const menu = Menu.buildFromTemplate([
+    {
+      label: app.name,
+      submenu: [
+        {
+          click: () => win.webContents.send('receive-msg', 'Msg A'),
+          label: 'Msg A',
+        },
+        {
+          click: () => win.webContents.send('receive-msg', 'Msg B'),
+          label: 'Mgg B',
+        }
+      ]
+    }
 
+  ])
+
+  Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   if (isDev) {
