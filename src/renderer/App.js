@@ -6,12 +6,21 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import SetupInfoPanel from "./components/SetupInfoPanel";
 
+/*theming */
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
 /*fonts*/
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 class App extends Component {
   constructor(props) {
     super(props);
@@ -31,19 +40,22 @@ class App extends Component {
   render() {
 
     return (
-      <Provider store={store}>
-        <Box>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Provider store={store}>
           <Box>
-            test2
-            <br />
-            {this.state.version}
+            <Box>
+              test2
+              <br />
+              {this.state.version}
+            </Box>
+            <Button onClick={this.handleClick} variant="contained">button</Button>
           </Box>
-          <Button onClick={this.handleClick} variant="contained">button</Button>
-        </Box>
-        <Box>
-          <SetupInfoPanel />
-        </Box>
-      </Provider>
+          <Box>
+            <SetupInfoPanel />
+          </Box>
+        </Provider>
+      </ThemeProvider>
     );
   }
 }
