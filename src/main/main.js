@@ -14,7 +14,7 @@ const {
 const { autoUpdater } = require("electron-updater")
 
 /*ipc */
-const ipc = require('./ipc_handlers.js');
+const ipc = require('./ipcHandlers.js');
 
 
 function createWindow() {
@@ -29,25 +29,25 @@ function createWindow() {
       preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
-  /* menu to test ipcToRenderer */
-  const menu = Menu.buildFromTemplate([
-    {
-      label: app.name,
-      submenu: [
-        {
-          click: () => win.webContents.send('receive-msg', 'Msg A'),
-          label: 'Msg A',
-        },
-        {
-          click: () => win.webContents.send('receive-msg', 'Msg B'),
-          label: 'Mgg B',
-        }
-      ]
-    }
+  // /* menu to test ipcToRenderer */
+  // const menu = Menu.buildFromTemplate([
+  //   {
+  //     label: app.name,
+  //     submenu: [
+  //       {
+  //         click: () => win.webContents.send('receive-msg', 'Msg A'),
+  //         label: 'Msg A',
+  //       },
+  //       {
+  //         click: () => win.webContents.send('receive-msg', 'Msg B'),
+  //         label: 'Mgg B',
+  //       }
+  //     ]
+  //   }
 
-  ])
+  // ])
 
-  Menu.setApplicationMenu(menu)
+  // Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   if (isDev) {
@@ -82,7 +82,7 @@ if (isDev) {
 };
 
 app.on('ready', () => {
-  ipc.ipc_handlers();
+  ipc.ipcHandlers();
   createWindow();
 });
 

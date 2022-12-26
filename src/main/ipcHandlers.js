@@ -1,7 +1,7 @@
 const { app, ipcMain, dialog } = require('electron');
 
 
-function ipc_handlers() {
+function ipcHandlers() {
   /*data send from rendered will be returned to main */
   ipcMain.handle('app', (event, data) => {
     switch (data.type) {
@@ -29,6 +29,6 @@ function ipc_handlers() {
   });
 };
 
-module.exports = { ipc_handlers };
+module.exports = { ipcHandlers };
 
 

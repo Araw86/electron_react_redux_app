@@ -4,6 +4,7 @@ import { Box, Button } from '@mui/material';
 
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import SetupInfoPanel from "./components/SetupInfoPanel";
 
 class App extends Component {
   constructor(props) {
@@ -26,11 +27,16 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Box>
-          test2
-          <br />
-          {this.state.version}
+          <Box>
+            test2
+            <br />
+            {this.state.version}
+          </Box>
+          <Button onClick={this.handleClick} variant="contained">button</Button>
         </Box>
-        <Button onClick={this.handleClick} variant="contained">button</Button>
+        <Box>
+          <SetupInfoPanel />
+        </Box>
       </Provider>
     );
   }
