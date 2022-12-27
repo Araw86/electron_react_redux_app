@@ -1,12 +1,21 @@
 const { app, ipcMain, dialog } = require('electron');
 
+const configurationfile = require('./utilities/configurationfile');
 
 function ipcHandlers() {
   /*data send from rendered will be returned to main */
-  ipcMain.handle('app', (event, data) => {
+  ipcMain.handle('config', (event, data) => {
     switch (data.type) {
       case 0:
         return app.getVersion();
+      case 1:
+        const oConfiguration = configurationfile.loadConfiguration();
+        console.log(oConfiguration);
+        return { sStatus: 'ok', oConfiguration: oConfiguration }
+      case 2:
+        console.log('store');
+        configurationfile.storeConfiguration(data.data);
+        return { sStatus: 'ok' }
       default:
         return null;
     }

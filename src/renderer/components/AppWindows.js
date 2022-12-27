@@ -7,6 +7,8 @@ import SetupInfoPanel from "./SetupInfoPanel";
 
 import { dispatchConfiguration } from '../redux/configurationSlice'
 
+import { configurationLoad } from '../utilities/configLoad'
+
 function AppWindows() {
 
   const [version, setVersion] = useState(null);
@@ -16,17 +18,14 @@ function AppWindows() {
 
   useEffect(() => {
     if (configLoadStatus === 0) {
-
-      dispatch(dispatchConfiguration({ configLoadStatus: 1, configuration: null }))
+      configurationLoad((configuration) => {
+        dispatch(dispatchConfiguration({ configLoadStatus: 1, configuration: configuration }))
+      });
     }
 
 
 
-    async function ipcTwoWay() {
-      let ipcVersion = await ipc_handlers.ipcTwoWay({ type: 0 });
-      setVersion(ipcVersion);
-    }
-    ipcTwoWay();
+
   });
 
   function handleClick() {
