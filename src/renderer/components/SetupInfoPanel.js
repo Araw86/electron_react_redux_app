@@ -3,9 +3,14 @@ import React, { useState } from 'react'
 import { Box } from '@mui/system'
 import { Tab, Tabs, Typography } from '@mui/material'
 
+import { useSelector, useDispatch } from 'react-redux'
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
+  const databaseLoaded = useSelector((state) => state.configurationReducer)
+  const dispatch = useDispatch()
+  console.log(databaseLoaded);
   return (
     <div
       role="tabpanel"

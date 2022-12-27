@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Box, Button } from '@mui/material';
+import React from "react";
+
 
 
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import SetupInfoPanel from "./components/SetupInfoPanel";
+
 
 /*theming */
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -16,48 +16,25 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+
+import AppWindows from "./components/AppWindows";
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { version: null };
-    this.handleClick = this.handleClick.bind(this);
-    ipc_handlers.ipcToRenderer((event, value) => console.log('Received msg' + value));
-  }
 
-  async componentDidMount() {
-    const version = await ipc_handlers.ipcTwoWay({ type: 0 });
-    this.setState({ version: version });
-  }
 
-  handleClick() {
-    ipc_handlers.ipcToMain('test text');
-  }
-  render() {
+export default function App() {
 
-    return (
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Provider store={store}>
-          <Box>
-            <Box>
-              test2
-              <br />
-              {this.state.version}
-            </Box>
-            <Button onClick={this.handleClick} variant="contained">button</Button>
-          </Box>
-          <Box>
-            <SetupInfoPanel />
-          </Box>
-        </Provider>
-      </ThemeProvider>
-    );
-  }
+
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <AppWindows />
+      </Provider>
+    </ThemeProvider>
+  )
 }
-
-export default App;
