@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import registerSlice from './registerSlice'
 import configurationSlice from './configurationSlice'
 
 
