@@ -3,9 +3,8 @@
 let configurationOperation = 0;
 
 const confTemplate = {
-  sCubemxfinderpath: '%USERPROFILE%/.stmcufinder/plugins/mcufinder/mcu'
+  sCubemxfinderpath: '%USERPROFILE%/.stmcufinder'
 }
-
 
 async function configurationLoad(callback) {
   if (configurationOperation === 0) {

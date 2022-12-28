@@ -17,7 +17,7 @@ const { autoUpdater } = require("electron-updater")
 const ipc = require('./ipcHandlers.js');
 
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
@@ -52,8 +52,8 @@ function createWindow() {
   // Open the DevTools.
   if (isDev) {
 
+    await win.loadFile('./build/renderer/index.html')
     win.webContents.openDevTools({ mode: "detach" });
-    win.loadFile('./build/renderer/index.html')
     // win.webContents.once("dom-ready", async () => {
     //   await installExtension([REDUX_DEVTOOLS])
     //     .then((name) => console.log(`Added Extension:  ${name}`))
@@ -82,8 +82,8 @@ if (isDev) {
 };
 
 app.on('ready', () => {
-  ipc.ipcHandlers();
   createWindow();
+  ipc.ipcHandlers();
 });
 
 

@@ -3,18 +3,23 @@ import { Box, Button } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import SetupInfoPanel from "./SetupInfoPanel";
+import SettingsPanel from "./SettingsPanel";
 
-import { dispatchConfiguration } from '../redux/configurationSlice'
+import { dispatchConfiguration, confResetState } from '../redux/configurationSlice'
 
-import { configurationLoad } from '../utilities/configLoad'
+import { configurationLoad, configurationSave } from '../utilities/configLoad'
+
+import { useMcuDocs, useMcuFeatures } from "./hooks/useMcuFiles";
 
 function AppWindows() {
 
+  const dispatch = useDispatch();
   const [version, setVersion] = useState(null);
   const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
+  const oConfiguration = useSelector((state) => state.configurationReducer.configuration)
 
-  const dispatch = useDispatch();
+  const bLocatedFileMcuDocs = useSelector((state) => state.configurationReducer.bLocatedFileMcuDocs)
+  const bLocatedFileMcuFeatures = useSelector((state) => state.configurationReducer.bLocatedFileMcuFeatures)
 
   useEffect(() => {
     if (configLoadStatus === 0) {
@@ -22,11 +27,19 @@ function AppWindows() {
         dispatch(dispatchConfiguration({ configLoadStatus: 1, configuration: configuration }))
       });
     }
-
-
-
-
   });
+
+  /* handle the configuration change */
+  useEffect(() => {
+    /*config changes */
+    console.log('config changes');
+    console.log(oConfiguration);
+    /*store config */
+    configurationSave(oConfiguration);
+    dispatch(confResetState());
+  }, [oConfiguration]);
+
+  useMcuDocs();
 
   function handleClick() {
     ipc_handlers.ipcToMain('test text');
@@ -42,7 +55,7 @@ function AppWindows() {
         <Button onClick={handleClick} variant="contained">button</Button>
       </Box>
       <Box>
-        <SetupInfoPanel />
+        <SettingsPanel />
       </Box>
     </Box>
   )

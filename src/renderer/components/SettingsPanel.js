@@ -4,13 +4,13 @@ import { Box } from '@mui/system'
 import { Tab, Tabs, Typography } from '@mui/material'
 
 import { useSelector, useDispatch } from 'react-redux'
+import SettingsPanelSettingsTab from './SettingsPanelSettingsTab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   const databaseLoaded = useSelector((state) => state.configurationReducer)
   const dispatch = useDispatch()
-  console.log(databaseLoaded);
   return (
     <div
       role="tabpanel"
@@ -21,14 +21,14 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
   );
 }
 
-function SetupInfoPanel() {
+function SettingsPanel() {
   const [tab, setTab] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -48,10 +48,10 @@ function SetupInfoPanel() {
         Info
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Settings
+        <SettingsPanelSettingsTab />
       </TabPanel>
     </Box>
   )
 }
 
-export default SetupInfoPanel
+export default SettingsPanel
