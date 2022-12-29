@@ -4,6 +4,7 @@ const initialState = {
   databaseLoaded: 0,
   configLoadStatus: 0,
 
+  sCubemxfinderPathValid: false,
   bLocatedFileMcuDocs: false,
   bLocatedFileMcuFeatures: false,
   oFileFileMcuFeatures: null,

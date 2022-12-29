@@ -10,6 +10,7 @@ import { dispatchConfiguration, confResetState } from '../redux/configurationSli
 import { configurationLoad, configurationSave } from '../utilities/configLoad'
 
 import { useMcuDocs, useMcuFeatures } from "./hooks/useMcuFiles";
+import DocPanel from "./DocPanel/DocPanel";
 
 function AppWindows() {
 
@@ -18,7 +19,7 @@ function AppWindows() {
   const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
   const oConfiguration = useSelector((state) => state.configurationReducer.configuration)
   const oState = useSelector((state) => state.configurationReducer)
-  console.log(oState);
+  // console.log(oState);
   useEffect(() => {
     if (configLoadStatus === 0) {
       configurationLoad((configuration) => {
@@ -30,8 +31,8 @@ function AppWindows() {
   /* handle the configuration change */
   useEffect(() => {
     /*config changes */
-    console.log('config changes');
-    console.log(oConfiguration);
+    // console.log('config changes');
+    // console.log(oConfiguration);
     /*store config */
     configurationSave(oConfiguration);
     dispatch(confResetState());
@@ -52,6 +53,10 @@ function AppWindows() {
         </Box>
         <Button onClick={handleClick} variant="contained">button</Button>
       </Box>
+      <Box>
+        <DocPanel />
+      </Box>
+
       <Box>
         <SettingsPanel />
       </Box>

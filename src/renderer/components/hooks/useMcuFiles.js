@@ -29,7 +29,6 @@ export function useMcuDocs() {
   useEffect(() => {
     if (bLocatedFileMcuDocs === true) {
       const sDocPath = sCubemxfinderpath + '/plugins/mcufinder/mcu/mcusDocs.json';
-      console.log(sDocPath);
       ipcFileLoad(sDocPath).then((ofile) => {
         dispatch(dispatchStateProp({ sProp: 'oFileMcuDocs', oValue: JSON.parse(ofile) }));
       }).catch((e) => console.log('issue'))
@@ -66,7 +65,6 @@ export function useMcuFeatures() {
   useEffect(() => {
     if (bLocatedFileMcuFeatures === true) {
       const sDocPath = sCubemxfinderpath + '/plugins/mcufinder/mcu/mcusFeaturesAndDescription.json';
-      console.log(sDocPath);
       ipcFileLoad(sDocPath).then((ofile) => {
         dispatch(dispatchStateProp({ sProp: 'oFileFileMcuFeatures', oValue: JSON.parse(ofile) }));
       }).catch((e) => console.log('issue'))
