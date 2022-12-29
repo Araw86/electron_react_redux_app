@@ -2,22 +2,29 @@ const fs = require('fs');
 const path = require('path').win32;
 
 function loadFile(sFilePath) {
-  const fs = require('fs');
   try {
-    sFilepath.replace('%USERPROFILE%', getUserHome());
+    /*solve issue of home dir */
+    const sHomePath = getUserHome();
+    sFilePath = sFilePath.replace('%USERPROFILE%', sHomePath);
     const data = fs.readFileSync(path.resolve(sFilePath), 'utf8');
+    return data;
   } catch (err) {
     console.error(err);
     return null;
   }
-  return data;
+
 }
 
 function pathExists(sFilePath) {
-  /*solve issue of home dir */
-  const sHomePath = getUserHome();
-  sFilePath = sFilePath.replace('%USERPROFILE%', sHomePath);
-  return fs.existsSync(path.resolve(sFilePath))
+  try {
+    /*solve issue of home dir */
+    const sHomePath = getUserHome();
+    sFilePath = sFilePath.replace('%USERPROFILE%', sHomePath);
+    return fs.existsSync(path.resolve(sFilePath))
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }
 
 function getUserHome() {

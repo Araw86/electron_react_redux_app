@@ -13,12 +13,10 @@ function ipcHandlers() {
       /*load configuration */
       case 1:
         const oConfiguration = configurationfile.loadConfiguration();
-        console.log('conf load');
         return { sStatus: 'ok', oConfiguration: oConfiguration }
       // return { sStatus: 'nok' }
       /*store configuration */
       case 2:
-        console.log('conf store');
         configurationfile.storeConfiguration(data.data);
         return { sStatus: 'ok' }
       /*path exuists */
@@ -26,7 +24,7 @@ function ipcHandlers() {
         return handlefiles.pathExists(data.data)
       /*load file */
       case 4:
-        return handlefiles.loadFile(data.data)
+        return handlefiles.loadFile(data.data);
       default:
         return null;
     }

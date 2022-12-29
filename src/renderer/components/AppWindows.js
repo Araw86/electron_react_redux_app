@@ -17,10 +17,8 @@ function AppWindows() {
   const [version, setVersion] = useState(null);
   const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
   const oConfiguration = useSelector((state) => state.configurationReducer.configuration)
-
-  const bLocatedFileMcuDocs = useSelector((state) => state.configurationReducer.bLocatedFileMcuDocs)
-  const bLocatedFileMcuFeatures = useSelector((state) => state.configurationReducer.bLocatedFileMcuFeatures)
-
+  const oState = useSelector((state) => state.configurationReducer)
+  console.log(oState);
   useEffect(() => {
     if (configLoadStatus === 0) {
       configurationLoad((configuration) => {
@@ -37,10 +35,10 @@ function AppWindows() {
     /*store config */
     configurationSave(oConfiguration);
     dispatch(confResetState());
-  }, [oConfiguration]);
+  }, [dispatch, oConfiguration]);
 
   useMcuDocs();
-
+  useMcuFeatures();
   function handleClick() {
     ipc_handlers.ipcToMain('test text');
   }

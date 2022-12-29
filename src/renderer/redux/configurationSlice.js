@@ -4,8 +4,10 @@ const initialState = {
   databaseLoaded: 0,
   configLoadStatus: 0,
 
-  bLocatedFileMcuDocs: 0,
-  bLocatedFileMcuFeatures: 0
+  bLocatedFileMcuDocs: false,
+  bLocatedFileMcuFeatures: false,
+  oFileFileMcuFeatures: null,
+  oFileMcuDocs: null
 }
 
 export const configurationSlice = createSlice({
@@ -21,24 +23,33 @@ export const configurationSlice = createSlice({
     dispatchConfiguration: (state, action) => {
       state.configLoadStatus = action.payload.configLoadStatus;
       state.configuration = action.payload.configuration;
-      return state;
+      // return state;
     },
     dispatchConfigurationProp: (state, action) => {
       const { sProp, oValue } = action.payload;
       state.configuration[sProp] = oValue;
-      return state;
+      // return state;
+    },
+
+    dispatchStateProp: (state, action) => {
+      const { sProp, oValue } = action.payload;
+      state[sProp] = oValue;
     },
 
     confResetState: (state) => {
       state.bLocatedFileMcuDocs++;
       state.bLocatedFileMcuFeatures++;
-      return state;
+      state.bLocatedFileMcuDocs = false;
+      state.oFileMcuDocs = null;
+      state.bLocatedFileMcuFeatures = false;
+      state.oFileFileMcuFeatures = null;
+      // return state;
     }
   }
 });
 
 // Action creators are generated for each case reducer function
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions
-export const { dispatchConfiguration, dispatchConfigurationProp, confResetState } = configurationSlice.actions
+export const { dispatchConfiguration, dispatchConfigurationProp, confResetState, dispatchStateProp } = configurationSlice.actions
 
 export default configurationSlice.reducer;

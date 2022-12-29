@@ -19,7 +19,6 @@ function configurationExists() {
 }
 
 function loadConfiguration() {
-  console.log(store);
   return store.get('configuration');
 }
 
