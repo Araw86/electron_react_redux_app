@@ -34,12 +34,19 @@ module.exports = [{
         }
       },
       {
-        test: [/\.s[ac]ss$/i, /\.css$/i],
+        test: [/\.css$/i],
         use: [
           // Creates `style` nodes from JS strings
           'style-loader',
           // Translates CSS into CommonJS
           'css-loader',
+        ],
+      },
+      {
+        test: [/\.s[ac]ss$/i],
+        use: [
+          // Creates `style` nodes from JS strings
+          'style-loader',
           // Compiles Sass to CSS
           'sass-loader',
         ],
@@ -47,7 +54,7 @@ module.exports = [{
     ]
   },
   resolve: {
-    extensions: ['.js', '.json', '.node'],
+    extensions: ['.js', '.json', '.node', '...'],
   },
   output: {
     filename: 'app.js',

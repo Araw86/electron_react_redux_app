@@ -14,10 +14,10 @@ const {
 const { autoUpdater } = require("electron-updater")
 
 /*ipc */
-const ipc = require('./ipc_handlers.js');
+const ipc = require('./ipcHandlers.js');
 
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
@@ -29,41 +29,41 @@ function createWindow() {
       preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
-  /* menu to test ipcToRenderer */
-  const menu = Menu.buildFromTemplate([
-    {
-      label: app.name,
-      submenu: [
-        {
-          click: () => win.webContents.send('receive-msg', 'Msg A'),
-          label: 'Msg A',
-        },
-        {
-          click: () => win.webContents.send('receive-msg', 'Msg B'),
-          label: 'Mgg B',
-        }
-      ]
-    }
+  // /* menu to test ipcToRenderer */
+  // const menu = Menu.buildFromTemplate([
+  //   {
+  //     label: app.name,
+  //     submenu: [
+  //       {
+  //         click: () => win.webContents.send('receive-msg', 'Msg A'),
+  //         label: 'Msg A',
+  //       },
+  //       {
+  //         click: () => win.webContents.send('receive-msg', 'Msg B'),
+  //         label: 'Mgg B',
+  //       }
+  //     ]
+  //   }
 
-  ])
+  // ])
 
-  Menu.setApplicationMenu(menu)
+  // Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   if (isDev) {
 
-    win.loadFile('./build/renderer/index.html')
-    win.webContents.once("dom-ready", async () => {
-      await installExtension([REDUX_DEVTOOLS])
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log("An error occurred: ", err))
-        .finally(() => {
-          win.webContents.openDevTools({ mode: "detach" });
-        });
-
-    });
-
+    await win.loadFile('./build/renderer/index.html')
     win.webContents.openDevTools({ mode: "detach" });
+    // win.webContents.once("dom-ready", async () => {
+    //   await installExtension([REDUX_DEVTOOLS])
+    //     .then((name) => console.log(`Added Extension:  ${name}`))
+    //     .catch((err) => console.log("An error occurred: ", err))
+    //     .finally(() => {
+    //       win.webContents.openDevTools({ mode: "detach" });
+    //     });
+
+    // });
+
   };
   if (!isDev) {
     win.loadFile(path.join(__dirname, '../renderer/index.html'))
@@ -82,8 +82,8 @@ if (isDev) {
 };
 
 app.on('ready', () => {
-  ipc.ipc_handlers();
   createWindow();
+  ipc.ipcHandlers();
 });
 
 
