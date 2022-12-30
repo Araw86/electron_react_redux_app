@@ -25,6 +25,9 @@ function ipcHandlers() {
       /*load file */
       case 4:
         return handlefiles.loadFile(data.data);
+
+      case 5:
+        return handlefiles.runFile(data.data);
       default:
         return null;
     }

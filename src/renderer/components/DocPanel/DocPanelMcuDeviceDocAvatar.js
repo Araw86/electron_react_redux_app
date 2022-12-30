@@ -2,6 +2,7 @@ import { Avatar, Popover, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react'
+import { ipcExeFile } from '../../utilities/ipcFunctions';
 
 function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   const aDoc = oLine.files.filter(filterDocumentation)
@@ -63,9 +64,15 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
     setAnchorEl(null);
   };
 
+  const handleClick = () => {
+    ipcExeFile('d:/4_uP/CubeMX_Data/' + oOneMcuDoc.displayName + '.pdf');
+    console.log('exec ')
+  };
+
+
   return (
     <Fragment >
-      <Avatar sx={{ bgcolor: color }} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{sAvatarText}</Avatar>
+      <Avatar sx={{ bgcolor: color }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{sAvatarText}</Avatar>
       <Popover
         id="mouse-over-popover"
         sx={{

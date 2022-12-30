@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path').win32;
+const { shell } = require('electron')
 
 function loadFile(sFilePath) {
   try {
@@ -27,10 +28,19 @@ function pathExists(sFilePath) {
   }
 }
 
+function runFile(sFilePath) {
+  try {
+    shell.openPath(sFilePath)
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
 function getUserHome() {
   // Return the value using process.env
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
-const handlefiles = { loadFile, pathExists }
+const handlefiles = { loadFile, pathExists, runFile }
 module.exports = handlefiles;
