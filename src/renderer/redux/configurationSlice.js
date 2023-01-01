@@ -8,7 +8,9 @@ const initialState = {
   bLocatedFileMcuDocs: false,
   bLocatedFileMcuFeatures: false,
   oFileFileMcuFeatures: null,
-  oFileMcuDocs: null
+  oFileMcuDocs: null,
+
+  sDocFilterDevice: ''
 }
 
 export const configurationSlice = createSlice({
@@ -38,8 +40,9 @@ export const configurationSlice = createSlice({
     },
 
     confResetState: (state) => {
-      state.bLocatedFileMcuDocs++;
-      state.bLocatedFileMcuFeatures++;
+      console.log('Config reset')
+      // state.bLocatedFileMcuDocs++;
+      // state.bLocatedFileMcuFeatures++;
       state.bLocatedFileMcuDocs = false;
       state.oFileMcuDocs = null;
       state.bLocatedFileMcuFeatures = false;

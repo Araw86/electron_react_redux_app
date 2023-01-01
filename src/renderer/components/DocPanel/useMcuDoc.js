@@ -10,11 +10,9 @@ function useMcuDoc() {
   useEffect(() => {
     /*filter all info about mcu */
     if ((oFileMcuDocs !== null) && (oFileFileMcuFeatures !== null)) {
-      console.log(oFileFileMcuFeatures);
       let oMcuInfo = oFileFileMcuFeatures.MCUs.reduce(reduceFunction, { serie: {}, line: {}, device: {}, mcuDoc: {}, mcuDocType: {} })
       oMcuInfo = oFileMcuDocs.Files.reduce(reduceDoc, oMcuInfo);
       // dispatch()
-      console.log(oMcuInfo);
       setMcuInfo(oMcuInfo);
       // console.log(oMcuDoc);
     }

@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box } from '@mui/system';
 
-function SettingsPanelSettingsTabPathBox({ fonChange = null, bDisabled = false, bError, sValue }) {
+function SettingsPanelSettingsTabPathBox({ fonChange = null, bDisabled = false, bError, sValue, sLabel }) {
   let errorDisplay;
   let icon;
   if (bError) {
@@ -28,7 +28,7 @@ function SettingsPanelSettingsTabPathBox({ fonChange = null, bDisabled = false, 
     <Box m={2}>
 
       <Stack direction="row" alignItems="center" spacing={2}>
-        <TextField {...errorDisplay} {...disabledProp} size="small" label="Path to .stmcufinder" fullWidth value={sValue} onChange={handleChange}></TextField>
+        <TextField {...errorDisplay} {...disabledProp} size="small" label={sLabel} fullWidth value={sValue} onChange={handleChange}></TextField>
         {icon}
       </Stack>
     </Box>
