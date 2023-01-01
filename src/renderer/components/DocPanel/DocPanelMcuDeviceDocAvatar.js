@@ -2,6 +2,7 @@ import { Avatar, Popover, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
 
 function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
@@ -28,6 +29,8 @@ export default DocPanelMcuDeviceDocAvatar;
 
 
 function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
+  const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
+  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const [anchorEl, setAnchorEl] = useState(null);
   let sAvatarText;
   let color = '';
@@ -65,8 +68,12 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
   };
 
   const handleClick = () => {
-    ipcExeFile('d:/4_uP/CubeMX_Data/' + oOneMcuDoc.displayName + '.pdf');
-    console.log('exec ')
+    if (sMxRepPathValid) {
+      ipcExeFile(sMxRepPathConf + oOneMcuDoc.displayName + '.pdf');
+      console.log('exec ')
+    } else {
+      console.log('Missing path')
+    }
   };
 
 

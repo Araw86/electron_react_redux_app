@@ -38,8 +38,9 @@ export const configurationSlice = createSlice({
     },
 
     confResetState: (state) => {
-      state.bLocatedFileMcuDocs++;
-      state.bLocatedFileMcuFeatures++;
+      console.log('Config reset')
+      // state.bLocatedFileMcuDocs++;
+      // state.bLocatedFileMcuFeatures++;
       state.bLocatedFileMcuDocs = false;
       state.oFileMcuDocs = null;
       state.bLocatedFileMcuFeatures = false;

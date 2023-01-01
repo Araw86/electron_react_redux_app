@@ -23,7 +23,7 @@ export function useMcuDocs() {
         }
       })
     }
-  }, [dispatch, sCubemxfinderpath]);
+  }, [dispatch, sCubemxfinderpath, bLocatedFileMcuDocs]);
 
   /* load file */
   useEffect(() => {
@@ -60,7 +60,7 @@ export function useMcuFeatures() {
       }
     })
     // }
-  }, [dispatch, bLocatedFileMcuDocs]);
+  }, [dispatch, bLocatedFileMcuDocs, bLocatedFileMcuFeatures]);
   /* load file */
   useEffect(() => {
     if (bLocatedFileMcuFeatures === true) {
