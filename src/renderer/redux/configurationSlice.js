@@ -8,7 +8,9 @@ const initialState = {
   bLocatedFileMcuDocs: false,
   bLocatedFileMcuFeatures: false,
   oFileFileMcuFeatures: null,
-  oFileMcuDocs: null
+  oFileMcuDocs: null,
+
+  sDocFilterDevice: ''
 }
 
 export const configurationSlice = createSlice({
