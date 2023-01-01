@@ -18,8 +18,6 @@ function DocPanel() {
   }
   return (
     <Box>
-      DocPanel
-
       <Grid container justifyContent="center" spacing={2}>
         {jMcuDevices}
       </Grid>

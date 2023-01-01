@@ -12,7 +12,7 @@ function TabPanel(props) {
   const databaseLoaded = useSelector((state) => state.configurationReducer)
   const dispatch = useDispatch()
   return (
-    <div
+    <Box
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
@@ -24,7 +24,7 @@ function TabPanel(props) {
           {children}
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -36,9 +36,8 @@ function SettingsPanel() {
   };
 
   return (
-    <Box>
-      <Box>SetupInfoPanel</Box>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
         <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Info" />
           <Tab label="Settings" />
