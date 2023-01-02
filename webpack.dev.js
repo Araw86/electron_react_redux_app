@@ -72,26 +72,27 @@ module.exports = [{
 },
 {
   mode: 'development',
+  entry: './src/main/main.js',
+  devtool: 'source-map',
+  target: 'electron-main',
+  output: {
+    path: path.resolve(__dirname, 'build', 'main'),
+    //clean: true
+  },
+  plugins: [
+    ...optionalPlugins,
+  ]
+},
+{
+  mode: 'development',
   entry: './src/main/preload/preload.js',
   devtool: 'source-map',
   target: 'electron-preload',
   output: {
     path: path.join(__dirname, 'build', 'main', 'preload'),
     filename: 'preload.js',
-    clean: true
+    // clean: true
   }
-},
-{
-  mode: 'development',
-  entry: './src/main/main.js',
-  devtool: 'source-map',
-  target: 'electron-main',
-  output: {
-    path: path.resolve(__dirname, 'build', 'main'),
-    clean: true
-  },
-  plugins: [
-    ...optionalPlugins,
-  ]
 }
+
 ];
