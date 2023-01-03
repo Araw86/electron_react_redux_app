@@ -79,7 +79,10 @@ module.exports = [{
   },
   plugins: [
     ...optionalPlugins,
-  ]
+  ],
+  externals: {
+    sqlite3: 'commonjs sqlite3',
+  },
 },
 {
   mode: 'production',

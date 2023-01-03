@@ -9,3 +9,7 @@ export async function ipcFileLoad(sPath) {
 export async function ipcExeFile(sPath) {
   return await ipc_handlers.ipcTwoWay({ type: 5, data: sPath });
 }
+
+export async function ipcSqlQuery(oSqlDetails) {
+  return await ipc_handlers.ipcTwoWay({ type: 6, data: oSqlDetails });
+}

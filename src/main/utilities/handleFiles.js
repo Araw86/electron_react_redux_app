@@ -42,5 +42,5 @@ function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
-const handlefiles = { loadFile, pathExists, runFile }
+const handlefiles = { loadFile, pathExists, runFile, getUserHome }
 module.exports = handlefiles;

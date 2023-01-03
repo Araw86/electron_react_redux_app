@@ -1,7 +1,8 @@
 const { app, ipcMain, dialog } = require('electron');
 
 const configurationfile = require('./utilities/configurationfile');
-const handlefiles = require('./utilities/handleFiles')
+const handlefiles = require('./utilities/handleFiles');
+const handlesql = require('./utilities/handlesql');
 
 function ipcHandlers() {
   /*data send from rendered will be returned to main */
@@ -28,6 +29,9 @@ function ipcHandlers() {
 
       case 5:
         return handlefiles.runFile(data.data);
+
+      case 6:
+        return handlesql.runsql(data.data);
       default:
         return null;
     }
