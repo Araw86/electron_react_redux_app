@@ -4,12 +4,18 @@ const initialState = {
   databaseLoaded: 0,
   configLoadStatus: 0,
 
-  sCubemxfinderPathValid: false,
   bLocatedFileMcuDocs: false,
   bLocatedFileMcuFeatures: false,
   oFileFileMcuFeatures: null,
   oFileMcuDocs: null,
 
+
+  sCubemxfinderPathValid: false,
+  sCubemxfinderPath: null,
+  bLocatedSqlFile: false,
+
+  sMxRepPathValid: false,
+  sMxRepPath: null,
   sDocFilterDevice: ''
 }
 
@@ -47,6 +53,11 @@ export const configurationSlice = createSlice({
       state.oFileMcuDocs = null;
       state.bLocatedFileMcuFeatures = false;
       state.oFileFileMcuFeatures = null;
+      state.sCubemxfinderPath = null;
+      state.sCubemxfinderPathValid = false;
+      state.bLocatedSqlFile = false;
+      state.sMxRepPathValid = false;
+      state.sMxRepPath = null;
       // return state;
     }
   }

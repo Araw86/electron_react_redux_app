@@ -69,7 +69,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
 
   const handleClick = () => {
     if (sMxRepPathValid) {
-      ipcExeFile(sMxRepPathConf + oOneMcuDoc.displayName + '.pdf');
+      ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
       console.log('exec ')
     } else {
       console.log('Missing path')

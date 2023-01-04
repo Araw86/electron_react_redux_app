@@ -30,7 +30,7 @@ function pathExists(sFilePath) {
 
 function runFile(sFilePath) {
   try {
-    shell.openPath(sFilePath)
+    shell.openPath(path.resolve(sFilePath))
   } catch (err) {
     console.error(err);
     return null;

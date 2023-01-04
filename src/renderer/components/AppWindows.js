@@ -9,11 +9,12 @@ import { dispatchConfiguration, confResetState } from '../redux/configurationSli
 
 import { configurationLoad, configurationSave } from '../utilities/configLoad'
 
-import { useMcuDocs, useMcuFeatures } from "./hooks/useMcuFiles";
+import { useDatabasePath, useMcuDocs, useMcuFeatures, useRepoPath } from "./hooks/useMcuFiles";
 import DocPanel from "./DocPanel/DocPanel";
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import useConfig from "./hooks/useConfig";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -41,30 +42,16 @@ function AppWindows() {
 
   const dispatch = useDispatch();
   const [version, setVersion] = useState(null);
-  const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
-  const oConfiguration = useSelector((state) => state.configurationReducer.configuration)
   const oState = useSelector((state) => state.configurationReducer)
-  // console.log(oState);
-  useEffect(() => {
-    if (configLoadStatus === 0) {
-      configurationLoad((configuration) => {
-        dispatch(dispatchConfiguration({ configLoadStatus: 1, configuration: configuration }))
-      });
-    }
-  }, []);
 
-  /* handle the configuration change */
-  useEffect(() => {
-    /*config changes */
-    // console.log('config changes');
-    // console.log(oConfiguration);
-    /*store config */
-    configurationSave(oConfiguration);
-    dispatch(confResetState());
-  }, [dispatch, oConfiguration]);
+  useConfig();
 
+  // console.log(oState)
   useMcuDocs();
   useMcuFeatures();
+
+  useDatabasePath();
+  useRepoPath();
 
   const [tab, setTab] = useState(0);
 

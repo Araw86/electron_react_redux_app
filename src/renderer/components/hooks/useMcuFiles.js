@@ -3,6 +3,87 @@ import { useSelector, useDispatch } from 'react-redux'
 import { dispatchConfigurationProp, dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcFileExists, ipcFileLoad, ipcSqlQuery } from "../../utilities/ipcFunctions";
 
+
+/*check if files in path exists */
+
+/* handle the qsl db path validation */
+export function useDatabasePath() {
+  const dispatch = useDispatch();
+  const sCubemxfinderPath = useSelector((state) => state.configurationReducer.sCubemxfinderPath);
+  const sCubemxfinderPathValid = useSelector((state) => state.configurationReducer.sCubemxfinderPathValid);
+  const sCubemxfinderConfPath = useSelector((state) => {
+    const oConf = state.configurationReducer.configuration;
+    if (oConf === undefined) {
+      return null;
+    }
+    return oConf.sCubemxfinderpath;
+
+  });
+
+  const bLocatedSqlFile = useSelector((state) => state.configurationReducer.bLocatedSqlFile)
+  useEffect(() => {
+    if (sCubemxfinderConfPath !== null) {
+      const sSqlPath = sCubemxfinderConfPath;
+      ipcFileExists(sSqlPath).then((bPathValid) => {
+        if (bPathValid) {
+          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPath', oValue: sSqlPath }));
+          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: true }));
+        } else {
+          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: false }));
+        }
+      })
+    }
+  }, [dispatch, sCubemxfinderConfPath, sCubemxfinderPath])
+
+  /* validate sql path */
+  useEffect(() => {
+    if (sCubemxfinderPath !== null) {
+      const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
+      ipcFileExists(sSqlPath).then((bPathValid) => {
+        if (bPathValid) {
+          dispatch(dispatchStateProp({ sProp: 'bLocatedSqlFile', oValue: true }));
+        }
+      })
+    }
+  }, [dispatch, sCubemxfinderPath]);
+
+  useEffect(() => {
+    if (bLocatedSqlFile === true) {
+      const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
+      const sSqlQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue , resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE rpn.class_id=1734 AND rpn_has_attribute.attribute_id=117 AND rpn_has_resource.subcategory_id=24'
+      ipcSqlQuery({ sSqlPath, sSqlQuery }).then((oResult) => {
+        console.log(oResult);
+      }).catch((e) => console.log('issue'))
+    }
+  }, [dispatch, bLocatedSqlFile]);
+}
+
+export function useRepoPath() {
+  const dispatch = useDispatch();
+  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid);
+  const sMxRepPathConf = useSelector((state) => {
+    const oConf = state.configurationReducer.configuration;
+    if (oConf === undefined) {
+      return null;
+    }
+    return oConf.sMxRepPath;
+  });
+
+  useEffect(() => {
+    if (sMxRepPathConf !== null) {
+      ipcFileExists(sMxRepPathConf).then((bPathValid) => {
+        if (bPathValid) {
+          dispatch(dispatchStateProp({ sProp: 'sMxRepPath', oValue: sMxRepPathConf }));
+          dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: true }));
+        } else {
+          dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: false }));
+        }
+      })
+    }
+  }, [dispatch, sMxRepPathConf, sMxRepPathValid])
+
+}
+
 export function useMcuDocs() {
   const bLocatedFileMcuDocs = useSelector((state) => state.configurationReducer.bLocatedFileMcuDocs);
   const dispatch = useDispatch();
@@ -68,12 +149,6 @@ export function useMcuFeatures() {
       ipcFileLoad(sDocPath).then((ofile) => {
         dispatch(dispatchStateProp({ sProp: 'oFileFileMcuFeatures', oValue: JSON.parse(ofile) }));
       }).catch((e) => console.log('issue'))
-      const sSqlPath = sCubemxfinderpath + '/plugins/mcufinder/mcu/cube-finder-db.db';
-      const sSqlQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue , resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE rpn.class_id=1734 AND rpn_has_attribute.attribute_id=117 AND rpn_has_resource.subcategory_id=24'
-      ipcSqlQuery({ sSqlPath, sSqlQuery }).then((oResult) => {
-        console.log(oResult);
-      }).catch((e) => console.log('issue'))
-
     }
   }, [dispatch, bLocatedFileMcuFeatures]);
   return null;
