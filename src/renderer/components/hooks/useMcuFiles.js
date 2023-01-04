@@ -47,16 +47,31 @@ export function useDatabasePath() {
     }
   }, [dispatch, sCubemxfinderPath]);
 
+
+  async function readSqlData() {
+    const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
+    const sSqlQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
+    const sqlData = await ipcSqlQuery({ sSqlPath, sSqlQuery })
+    console.log(sqlData);
+  }
+
   useEffect(() => {
     if (bLocatedSqlFile === true) {
       const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
-      const sSqlQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue , resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE rpn.class_id=1734 AND rpn_has_attribute.attribute_id=117 AND rpn_has_resource.subcategory_id=24'
-      ipcSqlQuery({ sSqlPath, sSqlQuery }).then((oResult) => {
-        console.log(oResult);
-      }).catch((e) => console.log('issue'))
+      const sSqlQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
+      const sqlData = ipcSqlQuery({ sSqlPath, sSqlQuery })
+      readSqlData();
+      console.log('after readSqlData')
+      // ipcSqlQuery({ sSqlPath, sSqlQuery }).then((oResult) => {
+      //   console.log(sqlData);
+      // }).catch((e) => console.log('issue'))
     }
   }, [dispatch, bLocatedSqlFile]);
+
+
 }
+
+
 
 export function useRepoPath() {
   const dispatch = useDispatch();

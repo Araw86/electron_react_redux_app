@@ -14,7 +14,7 @@ contextBridge.exposeInMainWorld('versions', {
 });
 
 contextBridge.exposeInMainWorld('ipc_handlers', {
-  ipcTwoWay: async (data) => {
+  ipcTwoWay: (data) => {
     return ipcRenderer.invoke('config', data);
   },
   ipcToMain: (text) => ipcRenderer.send('write-message', text),
