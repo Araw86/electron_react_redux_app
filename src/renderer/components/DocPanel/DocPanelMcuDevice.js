@@ -6,7 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DocPanelMcuDeviceDocAvatar from './DocPanelMcuDeviceDocAvatar';
 
 function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuDoc = [] }) {
-  const docTypes = ['Datasheet', 'Data brief', 'Reference manual', 'Programming manual', 'Errata sheet'];
+  const docTypes = ['ds', 'rm', 'pm', 'es'];
   const jAvatars = docTypes.map((sDocType) => {
     return (<DocPanelMcuDeviceDocAvatar key={sDocType} sDocType={sDocType} oLine={oLine} oMcuDoc={mcuDoc} />)
   });

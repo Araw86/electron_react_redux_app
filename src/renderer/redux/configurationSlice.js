@@ -16,7 +16,8 @@ const initialState = {
 
   sMxRepPathValid: false,
   sMxRepPath: null,
-  sDocFilterDevice: ''
+  sDocFilterDevice: '',
+  oSqlParsedData: null
 }
 
 export const configurationSlice = createSlice({
@@ -58,6 +59,7 @@ export const configurationSlice = createSlice({
       state.bLocatedSqlFile = false;
       state.sMxRepPathValid = false;
       state.sMxRepPath = null;
+      state.oSqlParsedData = null;
       // return state;
     }
   }
