@@ -14,7 +14,7 @@ function useMcuDoc() {
       oMcuInfo = oFileMcuDocs.Files.reduce(reduceDoc, oMcuInfo);
       // dispatch()
       setMcuInfo(oMcuInfo);
-      // console.log(oMcuDoc);
+      console.log(oMcuInfo);
     }
     function reduceFunction(oMcuInfo, oItem) {
       const { serie, line, files, RPN } = oItem;

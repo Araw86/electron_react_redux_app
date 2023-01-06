@@ -13,7 +13,9 @@ function DocPanel() {
   const sDocFilterDevice = useSelector((state) => state.configurationReducer.sDocFilterDevice);
 
 
-  const mcuInfo = useMcuDoc();
+  const mcuInfo = useSelector((state) => state.configurationReducer.oSqlParsedData);
+
+
   let jMcuDevices = [];
   let filteredLines = {};
   if (mcuInfo !== null) {

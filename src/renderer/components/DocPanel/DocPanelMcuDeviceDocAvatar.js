@@ -6,16 +6,16 @@ import { useSelector } from 'react-redux';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
 
 function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
-  const aDoc = oLine.files.filter(filterDocumentation)
-
-  function filterDocumentation(oOneMcuDoc) {
-    // console.log(`compare ${oOneMcuDoc.type} and ${sDocType}`);
-    return (oMcuDoc[oOneMcuDoc.file_id].type === sDocType)
-  }
+  // const aDoc = oLine.files.filter(filterDocumentation)
+  // function filterDocumentation(oOneMcuDoc) {
+  //   // console.log(`compare ${oOneMcuDoc.type} and ${sDocType}`);
+  //   return (oMcuDoc[oOneMcuDoc.file_id].type === sDocType)
+  // }
   let jAvatars = [];
 
-  jAvatars = aDoc.map(oDoc => {
-    return (<AvatarForOneDoc key={oDoc.file_id} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[oDoc.file_id]} />);
+  jAvatars = oLine[sDocType].map(sDoc => {
+
+    return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} />);
   })
 
   return (
@@ -33,27 +33,32 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const [anchorEl, setAnchorEl] = useState(null);
   let sAvatarText;
+  let sAvatarLongText;
   let color = '';
   const open = Boolean(anchorEl);
   switch (sDocType) {
-    case 'Datasheet':
+    case 'ds':
       sAvatarText = 'DS'
+      sAvatarLongText = 'Datasheet'
       color = deepOrange[700];
       break;
-    case 'Data brief':
-      sAvatarText = 'DB'
-      color = indigo[700];
-      break;
-    case 'Reference manual':
+    // case 'Data brief':
+    //   sAvatarText = 'DB'
+    //   color = indigo[700];
+    //   break;
+    case 'rm':
       sAvatarText = 'RM'
+      sAvatarLongText = 'Reference manual'
       color = lightBlue[700];
       break;
-    case 'Programming manual':
+    case 'pm':
       sAvatarText = 'PM'
+      sAvatarLongText = 'Programming manual'
       color = lightGreen[700];
       break;
-    case 'Errata sheet':
+    case 'es':
       sAvatarText = 'ES'
+      sAvatarLongText = 'Errata sheet'
       color = red[700];
       break;
     default:
@@ -69,7 +74,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
 
   const handleClick = () => {
     if (sMxRepPathValid) {
-      ipcExeFile(sMxRepPathConf + oOneMcuDoc.displayName + '.pdf');
+      ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
       console.log('exec ')
     } else {
       console.log('Missing path')
@@ -99,7 +104,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
         disableRestoreFocus
       >
         <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
-          <Typography >{oOneMcuDoc.displayName} - {oOneMcuDoc.type}</Typography>
+          <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
           <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
           <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
         </Box>

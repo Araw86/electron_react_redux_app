@@ -1,10 +1,10 @@
-import { Box, Paper, TextField } from '@mui/material';
+import { Box, Button, Paper, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { dispatchConfigurationProp, dispatchStateProp } from '../redux/configurationSlice'
+import { confResetState, dispatchConfigurationProp, dispatchStateProp } from '../redux/configurationSlice'
 import { ipcFileExists } from '../utilities/ipcFunctions';
 import SettingsPanelSettingsTabPathBox from './SettingsPanelSettingsTabPathBox';
 
@@ -18,62 +18,57 @@ function SettingsPanelSettingsTab() {
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
 
-  const [sPath, setPath] = useState(finderPath);
+  const [sFinderPath, setPath] = useState(finderPath);
   const [sMxRepPath, setMxRepPath] = useState(sMxRepPathConf);
   const dispatch = useDispatch();
 
 
   useEffect(() => {
-    checkPath(sPath);
-    checkMxRepPath(sMxRepPath);
-  }, [sMxRepPath, sPath])
-  function checkPath(sPath) {
+    checkPathDispatch(sFinderPath, 'sCubemxfinderpath');
+    checkPathDispatch(sMxRepPath, 'sMxRepPath');
+  }, [sMxRepPath, sFinderPath])
+
+  function checkPathDispatch(sPath, sConfProp) {
     ipcFileExists(sPath).then((bPathValid) => {
       if (bPathValid) {
-        dispatch(dispatchConfigurationProp({ sProp: 'sCubemxfinderpath', oValue: sPath }))
-        dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: true }));
+        dispatch(dispatchConfigurationProp({ sProp: sConfProp, oValue: sPath }))
+        // dispatch(dispatchStateProp({ sProp: sStateProp, oValue: sPath }));
+        // dispatch(dispatchStateProp({ sProp: sPathValid, oValue: true }));
       } else {
-        dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: false }));
+        // dispatch(dispatchStateProp({ sProp: sPathValid, oValue: false }));
       }
     })
   }
 
-  function checkMxRepPath(sPath) {
-    ipcFileExists(sPath).then((bPathValid) => {
-      if (bPathValid) {
-        dispatch(dispatchConfigurationProp({ sProp: 'sMxRepPath', oValue: sPath }))
-        dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: true }));
-      } else {
-        dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: false }));
-      }
-    })
+  function handleFinderPathChange(oEvent) {
+    const sPath = oEvent.target.value;
+    setPath(sPath);
+    checkPathDispatch(sPath, 'sCubemxfinderpath');
   }
 
-  function handleChange(oEvent) {
-    setPath(oEvent.target.value);
-    checkPath(oEvent.target.value)
-
+  function handleMxRepositroryPathChange(oEvent) {
+    const sPath = oEvent.target.value;
+    setMxRepPath(sPath);
+    checkPathDispatch(sPath, 'sMxRepPath');
   }
 
-  function handleMxRepositrory(oEvent) {
-    setMxRepPath(oEvent.target.value);
-    checkMxRepPath(oEvent.target.value)
+  function handleButton() {
+    dispatch(confResetState());
   }
 
   return (
     <Box>
       <Stack spacing={2}>
-
+        <Button onClick={handleButton}>Refresh Settings</Button>
         <Paper>
 
           Path to .mcufinder
-          <SettingsPanelSettingsTabPathBox bDisabled={false} bError={sCubemxfinderPathValid} sValue={sPath} fonChange={handleChange} sLabel={"Path to .stmcufinder"} />
-          <SettingsPanelSettingsTabPathBox bDisabled={true} bError={bLocatedFileMcuDocs} sValue={finderPath + '/plugins/mcufinder/mcu/mcusDocs.json'} sLabel={"Derivated path to mcusDocs.json"} />
-          <SettingsPanelSettingsTabPathBox bDisabled={true} bError={bLocatedFileMcuFeatures} sValue={finderPath + '/plugins/mcufinder/mcu/mcusFeaturesAndDescription.json'} sLabel={"Derivated path to mcusFeaturesAndDescription.json"} />
+          <SettingsPanelSettingsTabPathBox bDisabled={false} bError={sCubemxfinderPathValid} sValue={sFinderPath} fonChange={handleFinderPathChange} sLabel={"Path to .stmcufinder"} />
+          <SettingsPanelSettingsTabPathBox bDisabled={true} bError={bLocatedFileMcuDocs} sValue={finderPath + '/plugins/mcufinder/mcu/cube-finder-db.db'} sLabel={"Derivated path to cube-finder-db.db database file"} />
         </Paper>
         <Paper>
           Path to CubeMX repository
-          <SettingsPanelSettingsTabPathBox bDisabled={false} bError={sMxRepPathValid} sValue={sMxRepPath} fonChange={handleMxRepositrory} sLabel={"CubeMX repository folder"} />
+          <SettingsPanelSettingsTabPathBox bDisabled={false} bError={sMxRepPathValid} sValue={sMxRepPath} fonChange={handleMxRepositroryPathChange} sLabel={"CubeMX repository folder"} />
         </Paper>
       </Stack>
     </Box>

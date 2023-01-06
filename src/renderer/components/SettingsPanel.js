@@ -39,15 +39,15 @@ function SettingsPanel() {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
         <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Info" />
           <Tab label="Settings" />
+          <Tab label="Info" />
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
-        Info
+        <SettingsPanelSettingsTab />
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        <SettingsPanelSettingsTab />
+        Info
       </TabPanel>
     </Box>
   )

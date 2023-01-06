@@ -30,7 +30,7 @@ function pathExists(sFilePath) {
 
 function runFile(sFilePath) {
   try {
-    shell.openPath(sFilePath)
+    shell.openPath(path.resolve(sFilePath))
   } catch (err) {
     console.error(err);
     return null;
@@ -42,5 +42,5 @@ function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 }
 
-const handlefiles = { loadFile, pathExists, runFile }
+const handlefiles = { loadFile, pathExists, runFile, getUserHome }
 module.exports = handlefiles;
