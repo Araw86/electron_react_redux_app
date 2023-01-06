@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
-import { Box, Button, Grid, Tab, Tabs } from '@mui/material';
+import React, { Component, useEffect, useRef, useState } from "react";
+import { Box, Button, Drawer, Grid, Tab, Tabs } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -43,7 +43,7 @@ function AppWindows() {
   const dispatch = useDispatch();
   const [version, setVersion] = useState(null);
   const oState = useSelector((state) => state.configurationReducer)
-
+  const tabRef = useRef(null);
   useConfig();
 
   // console.log(oState)
@@ -64,24 +64,41 @@ function AppWindows() {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
+  console.log(tabRef)
+  let tabSx;
+  if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
+    tabSx = { width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` }
+  } else {
+    tabSx = { width: '100%' }
+  }
+
   return (
     <Box sx={{ height: "100vh", display: 'flex' }} >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={tab}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{
-          borderRight: 1, borderColor: 'divider', overflow: "visible", '.MuiTabs-indicator': {
-            left: 0
-          }
-        }}
+      <Drawer
+
+        variant="permanent"
+        anchor="left"
       >
-        <Tab icon={<TextSnippetIcon />} label="Doc" />
-        <Tab icon={<SettingsIcon />} label="Settings" />
-      </Tabs>
-      <Box sx={{ width: '100%' }}>
+
+        <Tabs
+          ref={tabRef}
+          orientation="vertical"
+          variant="scrollable"
+          value={tab}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          sx={{
+            overflow: "visible", '.MuiTabs-indicator': {
+              left: 0
+            }
+          }}
+        >
+          <Tab icon={<TextSnippetIcon />} label="Doc" />
+          <Tab icon={<SettingsIcon />} label="Settings" />
+        </Tabs>
+      </Drawer>
+      <Box sx={{ ...tabSx }}>
+        {/* <Box sx={{ width: `calc(100% - ${drawerRef.current.offsetWidth}px)`, ml: `${drawerRef.current.offsetWidth}px` }}> */}
         <Box>
           <TabPanel value={tab} index={0}>
             <DocPanel />
