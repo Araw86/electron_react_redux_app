@@ -48,7 +48,7 @@
     "watch": "webpack --config webpack.dev.js --watch",
     "build_dev": "webpack --config webpack.dev.js",
     "build_prod": "webpack --config webpack.prod.js",
-    "electron:dist": "yarn build_prod && electron-builder -c.extraMetadata.main=build/main/main.js",
+    "build_dist": "webpack --config webpack.prod.js && electron-builder -c.extraMetadata.main=build/main/main.js",
     "build_dist_only": "electron-builder -c.extraMetadata.main=build/main/main.js",
     "build_dist_github": "yarn build_dist_only --win --publish always"
   },

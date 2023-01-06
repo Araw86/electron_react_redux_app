@@ -62,7 +62,7 @@ export function useDatabasePath() {
     const aDocEs = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocEsQuery })
     const sDocPmQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=24)'
     const aDocPm = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocPmQuery })
-    const sDocAllQuery = 'SELECT DISTINCT resource.alternateName, resource.description, resource.version FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
+    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
     const aDocAll = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAllQuery });
     const oParsedSqlData = parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAll);
     if (oParsedSqlData !== null) {
@@ -81,7 +81,11 @@ export function useDatabasePath() {
     }, oParsedSqlData);
     /*parse documentation */
     oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
-      oParsedSqlData.mcuDoc[oDoc.alternateName] = { displayName: oDoc.alternateName, title: oDoc.description, versionNumber: oDoc.version }
+      if (!oParsedSqlData.mcuDoc.hasOwnProperty(oDoc.alternateName)) {
+        oParsedSqlData.mcuDoc[oDoc.alternateName] = { displayName: oDoc.alternateName, title: oDoc.description, versionNumber: oDoc.version, devices: [oDoc.rpn] }
+      } else {
+        oParsedSqlData.mcuDoc[oDoc.alternateName].devices.push(oDoc.rpn)
+      }
       return oParsedSqlData
     }, oParsedSqlData)
     oParsedSqlData = aDocDs.reduce((oParsedSqlData, oLineDoc) => {

@@ -1,4 +1,4 @@
-import { Avatar, Popover, Typography } from '@mui/material';
+import { Avatar, Chip, Popover, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react'
@@ -13,9 +13,9 @@ function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   // }
   let jAvatars = [];
 
-  jAvatars = oLine[sDocType].map(sDoc => {
+  jAvatars = oLine[sDocType].map((sDoc, iIndex, aDocs) => {
 
-    return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} />);
+    return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 1 ? true : false} />);
   })
 
   return (
@@ -28,7 +28,7 @@ function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
 export default DocPanelMcuDeviceDocAvatar;
 
 
-function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
+function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,11 +36,19 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
   let sAvatarLongText;
   let color = '';
   const open = Boolean(anchorEl);
+  let aChipContent = [];
   switch (sDocType) {
     case 'ds':
-      sAvatarText = 'DS'
-      sAvatarLongText = 'Datasheet'
-      color = deepOrange[700];
+      if (oOneMcuDoc.displayName.search("DB") < 0) {
+        sAvatarText = 'DS'
+        sAvatarLongText = 'Datasheet'
+        color = deepOrange[700];
+      } else {
+        sAvatarText = 'DB'
+        sAvatarLongText = 'Databreef'
+        color = indigo[700];
+      }
+      aChipContent = createChipContent(oOneMcuDoc)
       break;
     // case 'Data brief':
     //   sAvatarText = 'DB'
@@ -50,6 +58,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
       sAvatarText = 'RM'
       sAvatarLongText = 'Reference manual'
       color = lightBlue[700];
+      aChipContent = createChipContent(oOneMcuDoc)
       break;
     case 'pm':
       sAvatarText = 'PM'
@@ -60,9 +69,16 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
       sAvatarText = 'ES'
       sAvatarLongText = 'Errata sheet'
       color = red[700];
+      aChipContent = createChipContent(oOneMcuDoc)
       break;
     default:
       break;
+  }
+
+  function createChipContent(oOneMcuDoc) {
+    return oOneMcuDoc.devices.map((sDeviceName) =>
+      <Chip key={sDeviceName} label={sDeviceName} size="small" />
+    )
   }
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -107,6 +123,9 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc }) {
           <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
           <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
           <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
+
+
+          {bAssignDevice ? aChipContent : <Fragment></Fragment>}
         </Box>
       </Popover>
     </Fragment>

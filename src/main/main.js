@@ -1,4 +1,4 @@
-const { app, session, dialog, BrowserWindow, Menu } = require('electron');
+const { app, session, dialog, BrowserWindow, Menu, Notification } = require('electron');
 const path = require('path');
 
 /*debug*/
@@ -84,6 +84,7 @@ if (isDev) {
 app.on('ready', () => {
   createWindow();
   ipc.ipcHandlers();
+
 });
 
 
@@ -123,16 +124,23 @@ autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
   console.log(_event);
   console.log(releaseNotes);
   console.log(releaseName);
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Ok'],
-    title: 'Application No Update',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'No version found.'
-  }
-  dialog.showMessageBox(dialogOpts, (response) => {
+  // const dialogOpts = {
+  //   type: 'info',
+  //   buttons: ['Ok'],
+  //   title: 'Application No Update',
+  //   message: process.platform === 'win32' ? releaseNotes : releaseName,
+  //   detail: 'No version found.'
+  // }
+  // dialog.showMessageBox(dialogOpts, (response) => {
 
-  });
+  // });
+
+  const NOTIFICATION_TITLE = 'Application No Update'
+  const NOTIFICATION_BODY = 'No new version found'
+  showNotification();
+  function showNotification() {
+    new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show()
+  }
 }
 );
 
