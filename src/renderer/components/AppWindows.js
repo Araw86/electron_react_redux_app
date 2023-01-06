@@ -52,7 +52,13 @@ function AppWindows() {
 
   useDatabasePath();
   useRepoPath();
-
+  useEffect(() => {
+    async function readVersion() {
+      const appVersion = await ipc_handlers.ipcTwoWay({ type: 0 });
+      document.title = 'Document Opener ' + appVersion;
+    }
+    readVersion();
+  }, []);
   const [tab, setTab] = useState(0);
 
   const handleChange = (event, newValue) => {
