@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { AppBar, Box, Button, Grid, Tab, Tabs, TextField, Toolbar } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -10,6 +10,7 @@ import { Stack } from '@mui/system';
 import DocPanelSearch from './DocPanelSearch';
 
 function DocPanel() {
+  const boxRef = useRef(null);
   const sDocFilterDevice = useSelector((state) => state.configurationReducer.sDocFilterDevice);
 
 
@@ -36,17 +37,26 @@ function DocPanel() {
       jMcuDevices.push(<DocPanelMcuDevice key={oLine.line} oLine={oLine} mcuDoc={mcuInfo.mcuDoc} />);
     });
   }
+  let appBarSx;
+  if ((boxRef.current !== null) && (boxRef.current.offsetWidth !== null)) {
+    appBarSx = { width: `calc(100% - ${boxRef.current.offsetLeft}px)`, ml: `${boxRef.current.offsetLeft}px` }
+  } else {
+    appBarSx = { width: '100%' }
+  }
   return (
-    <Box>
-      <AppBar position="static">
+    <Box ref={boxRef}>
+      <AppBar position="fixed" sx={{ ...appBarSx }}>
         <Toolbar>
           <DocPanelSearch />
         </Toolbar>
 
       </AppBar>
-      <Grid container justifyContent="center" spacing={2}>
-        {jMcuDevices}
-      </Grid>
+      <Box m={1}>
+        <Toolbar />
+        <Grid container justifyContent="center" spacing={2}>
+          {jMcuDevices}
+        </Grid>
+      </Box>
     </Box>
   )
 }

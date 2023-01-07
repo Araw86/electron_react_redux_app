@@ -64,7 +64,6 @@ function AppWindows() {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
-  console.log(tabRef)
   let tabSx;
   if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
     tabSx = { width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` }
