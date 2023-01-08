@@ -23,11 +23,11 @@ function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuD
 
             {/* <Stack direction="row" spacing={1}> */}
             {jAvatars}
-            <Grid item >
+            {/* <Grid item >
               <IconButton aria-label="settings">
                 <MoreVertIcon />
               </IconButton>
-            </Grid>
+            </Grid> */}
             {/* </Stack> */}
           </Grid>
         </CardContent>
