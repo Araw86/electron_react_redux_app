@@ -1,4 +1,4 @@
-import { Avatar, Chip, Popover, Typography } from '@mui/material';
+import { Avatar, Chip, Grid, Popover, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react'
@@ -100,34 +100,37 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
 
   return (
     <Fragment >
-      <Avatar sx={{ bgcolor: color }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{sAvatarText}</Avatar>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: 'none',
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
-          <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
-          <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
-          <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
+      <Grid item>
+
+        <Avatar sx={{ bgcolor: color }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{sAvatarText}</Avatar>
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: 'none',
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
+            <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
+            <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
+            <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
 
 
-          {bAssignDevice ? aChipContent : <Fragment></Fragment>}
-        </Box>
-      </Popover>
+            {bAssignDevice ? aChipContent : <Fragment></Fragment>}
+          </Box>
+        </Popover>
+      </Grid>
     </Fragment>
   );
 }

@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
-import { Box, Button, Grid, Tab, Tabs } from '@mui/material';
+import React, { Component, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Box, Button, Drawer, Grid, Tab, Tabs } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -43,6 +43,7 @@ function AppWindows() {
   const dispatch = useDispatch();
   const [version, setVersion] = useState(null);
   const oState = useSelector((state) => state.configurationReducer)
+  const tabRef = useRef(null);
 
   useConfig();
 
@@ -64,27 +65,82 @@ function AppWindows() {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
+  // const [tabSx, setSxTab] = useState({});
+  // useEffect(() => {
+  //   if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
+  //     console.log(tabRef.current.offsetWidth)
+  //     setSxTab({ width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` })
+  //   } else {
+  //     setSxTab({ width: '100%' })
+  //   }
+  //   console.log(tabRef)
+
+  // }, [tabSx, tabRef])
+
+  // const [tabSx, setSxTab] = useState({});
+  // const refCallback = useCallback((nodeValue) => {
+  //   console.log(nodeValue)
+  //   if ((nodeValue !== null) && (nodeValue.clientWidth !== null)) {
+  //     console.log(nodeValue.clientWidth)
+  //     setSxTab({ width: `calc(100% - ${nodeValue.clientWidth}px)`, ml: `${nodeValue.clientWidth}px` })
+  //   } else {
+  //     setSxTab({ width: '100%' })
+  //   }
+
+  // }, [])
+
+  const [tabSx, setSxTab] = useState({});
+  const [tabWidth, setTabWidth] = useState(0);
+  useEffect(() => {
+    const observer = new ResizeObserver(entries => {
+      // setwidth(entries[0].contentRect.width)
+      setSxTab({ width: `calc(100% - ${entries[0].contentRect.width}px)`, ml: `${entries[0].contentRect.width}px` })
+      setTabWidth(entries[0].contentRect.width)
+    })
+    observer.observe(tabRef.current)
+    return () => tabRef.current && observer.unobserve(tabRef.current)
+  }, [])
+
+  // let tabSx = {}
+  // if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
+  //   tabSx = { width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` }
+  // } else {
+  //   tabSx = { width: '100%' }
+  // }
+  // console.log(tabRef)
+  // let tabSx;
   return (
     <Box sx={{ height: "100vh", display: 'flex' }} >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={tab}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{
-          borderRight: 1, borderColor: 'divider', overflow: "visible", '.MuiTabs-indicator': {
-            left: 0
-          }
-        }}
-      >
-        <Tab icon={<TextSnippetIcon />} label="Doc" />
-        <Tab icon={<SettingsIcon />} label="Settings" />
-      </Tabs>
-      <Box sx={{ width: '100%' }}>
+      <Box>
+        <Drawer
+          variant="permanent"
+          anchor="left"
+        >
+
+          <Tabs
+            ref={tabRef}
+            // ref={refCallback}
+            orientation="vertical"
+            variant="scrollable"
+            value={tab}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            sx={{
+              overflow: "visible", '.MuiTabs-indicator': {
+                left: 0
+              }
+            }}
+          >
+            <Tab icon={<TextSnippetIcon />} label="Doc" />
+            <Tab icon={<SettingsIcon />} label="Settings" />
+          </Tabs>
+        </Drawer>
+      </Box>
+      <Box sx={{ ...tabSx }}>
+        {/* <Box sx={{ width: `calc(100% - ${drawerRef.current.offsetWidth}px)`, ml: `${drawerRef.current.offsetWidth}px` }}> */}
         <Box>
           <TabPanel value={tab} index={0}>
-            <DocPanel />
+            <DocPanel offsetWidth={tabWidth} />
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <SettingsPanel />
