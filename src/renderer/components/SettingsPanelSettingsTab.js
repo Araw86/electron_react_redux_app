@@ -10,11 +10,9 @@ import SettingsPanelSettingsTabPathBox from './SettingsPanelSettingsTabPathBox';
 
 
 function SettingsPanelSettingsTab() {
-  const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
   const finderPath = useSelector((state) => state.configurationReducer.configuration.sCubemxfinderpath)
   const sCubemxfinderPathValid = useSelector((state) => state.configurationReducer.sCubemxfinderPathValid)
-  const bLocatedFileMcuDocs = useSelector((state) => state.configurationReducer.bLocatedFileMcuDocs)
-  const bLocatedFileMcuFeatures = useSelector((state) => state.configurationReducer.bLocatedFileMcuFeatures)
+  const bLocatedSqlFile = useSelector((state) => state.configurationReducer.bLocatedSqlFile)
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
 
@@ -32,10 +30,6 @@ function SettingsPanelSettingsTab() {
     ipcFileExists(sPath).then((bPathValid) => {
       if (bPathValid) {
         dispatch(dispatchConfigurationProp({ sProp: sConfProp, oValue: sPath }))
-        // dispatch(dispatchStateProp({ sProp: sStateProp, oValue: sPath }));
-        // dispatch(dispatchStateProp({ sProp: sPathValid, oValue: true }));
-      } else {
-        // dispatch(dispatchStateProp({ sProp: sPathValid, oValue: false }));
       }
     })
   }
@@ -64,7 +58,7 @@ function SettingsPanelSettingsTab() {
 
           Path to .mcufinder
           <SettingsPanelSettingsTabPathBox bDisabled={false} bError={sCubemxfinderPathValid} sValue={sFinderPath} fonChange={handleFinderPathChange} sLabel={"Path to .stmcufinder"} />
-          <SettingsPanelSettingsTabPathBox bDisabled={true} bError={bLocatedFileMcuDocs} sValue={finderPath + '/plugins/mcufinder/mcu/cube-finder-db.db'} sLabel={"Derivated path to cube-finder-db.db database file"} />
+          <SettingsPanelSettingsTabPathBox bDisabled={true} bError={bLocatedSqlFile} sValue={finderPath + '/plugins/mcufinder/mcu/cube-finder-db.db'} sLabel={"Derivated path to cube-finder-db.db database file"} />
         </Paper>
         <Paper>
           Path to CubeMX repository
