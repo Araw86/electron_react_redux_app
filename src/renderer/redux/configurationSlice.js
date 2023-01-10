@@ -4,12 +4,6 @@ const initialState = {
   databaseLoaded: 0,
   configLoadStatus: 0,
 
-  bLocatedFileMcuDocs: false,
-  bLocatedFileMcuFeatures: false,
-  oFileFileMcuFeatures: null,
-  oFileMcuDocs: null,
-
-
   sCubemxfinderPathValid: false,
   sCubemxfinderPath: null,
   bLocatedSqlFile: false,
@@ -48,12 +42,7 @@ export const configurationSlice = createSlice({
 
     confResetState: (state) => {
       console.log('Config reset')
-      // state.bLocatedFileMcuDocs++;
-      // state.bLocatedFileMcuFeatures++;
-      state.bLocatedFileMcuDocs = false;
-      state.oFileMcuDocs = null;
-      state.bLocatedFileMcuFeatures = false;
-      state.oFileFileMcuFeatures = null;
+
       state.sCubemxfinderPath = null;
       state.sCubemxfinderPathValid = false;
       state.bLocatedSqlFile = false;

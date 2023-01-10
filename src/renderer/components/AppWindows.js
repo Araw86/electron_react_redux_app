@@ -1,15 +1,12 @@
-import React, { Component, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Box, Button, Drawer, Grid, Tab, Tabs } from '@mui/material';
+import React, { Component, useEffect, useRef, useState } from "react";
+import { Box, Drawer, Tab, Tabs } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
 
 import SettingsPanel from "./SettingsPanel";
 
-import { dispatchConfiguration, confResetState } from '../redux/configurationSlice'
 
-import { configurationLoad, configurationSave } from '../utilities/configLoad'
-
-import { useDatabasePath, useMcuDocs, useMcuFeatures, useRepoPath } from "./hooks/useMcuFiles";
+import { useDatabasePath, useRepoPath } from "./hooks/useMcuFiles";
 import DocPanel from "./DocPanel/DocPanel";
 
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -19,8 +16,6 @@ import useConfig from "./hooks/useConfig";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  const databaseLoaded = useSelector((state) => state.configurationReducer)
-  const dispatch = useDispatch()
   return (
     <Box
       role="tabpanel"
@@ -41,15 +36,10 @@ function TabPanel(props) {
 function AppWindows() {
 
   const dispatch = useDispatch();
-  const [version, setVersion] = useState(null);
-  const oState = useSelector((state) => state.configurationReducer)
   const tabRef = useRef(null);
 
   useConfig();
 
-  // console.log(oState)
-  useMcuDocs();
-  useMcuFeatures();
 
   useDatabasePath();
   useRepoPath();
@@ -65,29 +55,6 @@ function AppWindows() {
   const handleChange = (event, newValue) => {
     setTab(newValue);
   };
-  // const [tabSx, setSxTab] = useState({});
-  // useEffect(() => {
-  //   if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
-  //     console.log(tabRef.current.offsetWidth)
-  //     setSxTab({ width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` })
-  //   } else {
-  //     setSxTab({ width: '100%' })
-  //   }
-  //   console.log(tabRef)
-
-  // }, [tabSx, tabRef])
-
-  // const [tabSx, setSxTab] = useState({});
-  // const refCallback = useCallback((nodeValue) => {
-  //   console.log(nodeValue)
-  //   if ((nodeValue !== null) && (nodeValue.clientWidth !== null)) {
-  //     console.log(nodeValue.clientWidth)
-  //     setSxTab({ width: `calc(100% - ${nodeValue.clientWidth}px)`, ml: `${nodeValue.clientWidth}px` })
-  //   } else {
-  //     setSxTab({ width: '100%' })
-  //   }
-
-  // }, [])
 
   const [tabSx, setSxTab] = useState({});
   const [tabWidth, setTabWidth] = useState(0);
@@ -101,14 +68,6 @@ function AppWindows() {
     return () => tabRef.current && observer.unobserve(tabRef.current)
   }, [])
 
-  // let tabSx = {}
-  // if ((tabRef.current !== null) && (tabRef.current.offsetWidth !== null)) {
-  //   tabSx = { width: `calc(100% - ${tabRef.current.offsetWidth}px)`, ml: `${tabRef.current.offsetWidth}px` }
-  // } else {
-  //   tabSx = { width: '100%' }
-  // }
-  // console.log(tabRef)
-  // let tabSx;
   return (
     <Box sx={{ height: "100vh", display: 'flex' }} >
       <Box>

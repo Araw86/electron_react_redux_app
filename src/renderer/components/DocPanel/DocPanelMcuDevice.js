@@ -1,8 +1,9 @@
-import { Avatar, Card, CardContent, Grid, IconButton, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardContent, Grid, IconButton, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
+import DocPanelMcuDeviceAnDialog from './DocPanelMcuDeviceAnDialog';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import DocPanelMcuDeviceDocAvatar from './DocPanelMcuDeviceDocAvatar';
 
 function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuDoc = [] }) {
@@ -20,14 +21,9 @@ function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuD
             {oLine.line}
           </Typography>
           <Grid container spacing={1}>
-
             {/* <Stack direction="row" spacing={1}> */}
             {jAvatars}
-            {/* <Grid item >
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            </Grid> */}
+            <DocPanelMcuDeviceAnDialog oLine={oLine} oMcuDoc={mcuDoc} />
             {/* </Stack> */}
           </Grid>
         </CardContent>
