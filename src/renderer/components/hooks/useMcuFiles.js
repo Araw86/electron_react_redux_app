@@ -62,21 +62,26 @@ export function useDatabasePath() {
     const aDocEs = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocEsQuery })
     const sDocPmQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=24)'
     const aDocPm = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocPmQuery })
-    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
+
+    const sDocAnQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19)'
+    const aDocAn = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAnQuery })
+
+    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
     const aDocAll = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAllQuery });
-    const oParsedSqlData = parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAll);
+
+    const oParsedSqlData = parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
     if (oParsedSqlData !== null) {
       console.log(oParsedSqlData)
       dispatch(dispatchStateProp({ sProp: 'oSqlParsedData', oValue: oParsedSqlData }))
     }
   }
 
-  function parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAll) {
+  function parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll) {
     let oParsedSqlData = { device: {}, line: {}, mcuDoc: {}, }
     /* parse devices and lines*/
     oParsedSqlData = aDeviceLine.reduce((oParsedSqlData, oDeviceLine) => {
       oParsedSqlData.device[oDeviceLine.rpn] = { line: oDeviceLine.strValue };
-      oParsedSqlData.line[oDeviceLine.strValue] = { line: oDeviceLine.strValue, ds: [], rm: [], es: [], pm: [] }
+      oParsedSqlData.line[oDeviceLine.strValue] = { line: oDeviceLine.strValue, ds: [], rm: [], es: [], pm: [], an: [] }
       return oParsedSqlData
     }, oParsedSqlData);
     /*parse documentation */
@@ -102,6 +107,10 @@ export function useDatabasePath() {
     }, oParsedSqlData)
     oParsedSqlData = aDocPm.reduce((oParsedSqlData, oLineDoc) => {
       oParsedSqlData.line[oLineDoc.strValue].pm.push(oLineDoc.alternateName)
+      return oParsedSqlData
+    }, oParsedSqlData)
+    oParsedSqlData = aDocAn.reduce((oParsedSqlData, oLineDoc) => {
+      oParsedSqlData.line[oLineDoc.strValue].an.push(oLineDoc.alternateName)
       return oParsedSqlData
     }, oParsedSqlData)
     return oParsedSqlData;
