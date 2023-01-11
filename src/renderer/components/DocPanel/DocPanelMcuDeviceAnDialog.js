@@ -1,13 +1,16 @@
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material'
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Stack, TextField } from '@mui/material'
 import React, { Fragment, useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { yellow } from '@mui/material/colors';
 import { useSelector } from 'react-redux';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
 
+import SearchIcon from '@mui/icons-material/Search';
+import BackspaceIcon from '@mui/icons-material/Backspace';
+
 export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   const [open, setOpen] = useState(false);
-
+  const [sSearchValue, setSearchValue] = useState('')
 
   const handleClose = () => {
     setOpen(false);
@@ -16,8 +19,27 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   const handleOpen = () => {
     setOpen(true);
   }
+
+  const handleChange = (oEvent) => {
+    setSearchValue(oEvent.target.value)
+  }
+  const handleSearchClear = () => {
+    setSearchValue('')
+  }
+  let aFilteredDoc = []
+  if (sSearchValue !== '') {
+    aFilteredDoc = oLine.an.reduce((aFilteredDoc, sDoc) => {
+      if (sDoc.search(sSearchValue.toUpperCase()) !== -1) {
+        aFilteredDoc.push(sDoc)
+      }
+      return aFilteredDoc;
+    }, [])
+  } else {
+    aFilteredDoc = oLine.an;
+  }
+
   // const aDocuments = [];
-  const aDocuments = oLine.an.map((sDoc) => {
+  const aDocuments = aFilteredDoc.map((sDoc) => {
     return <DocPanelMcuDeviceAnDialogItem key={sDoc} oOneDoc={oMcuDoc[sDoc]} />
   })
   return (
@@ -26,7 +48,21 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
         <MoreVertIcon />
       </IconButton>
       <Dialog onClose={handleClose} open={open} scroll={'paper'}>
-        <DialogTitle>Other Documentation</DialogTitle>
+        <DialogTitle>
+          <Stack direction="row" justifyContent="space-between"
+            alignItems="center" spacing={1}>
+
+            Other Documentation
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <SearchIcon />
+              <TextField size="small" onChange={handleChange} value={sSearchValue}></TextField>
+              <IconButton aria-label="Example" onClick={handleSearchClear}>
+                <BackspaceIcon />
+              </IconButton>
+            </Stack>
+          </Stack>
+        </DialogTitle>
+
         <DialogContent >
 
           <List>
@@ -62,7 +98,7 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
             AN
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={oOneDoc.displayName + ' ver:' + oOneDoc.versionNumber} secondary={oOneDoc.title} />
+        <ListItemText sx={{ wordWrap: 'break-word', }} primary={oOneDoc.displayName + ' ver:' + oOneDoc.versionNumber} secondary={oOneDoc.title} />
       </ListItemButton>
     </ListItem>
 
