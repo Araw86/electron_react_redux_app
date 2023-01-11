@@ -16,6 +16,9 @@ const { autoUpdater } = require("electron-updater")
 /*ipc */
 const ipc = require('./ipcHandlers.js');
 
+const electronDl = require('electron-dl');
+
+electronDl();
 
 async function createWindow() {
   // Create the browser window.

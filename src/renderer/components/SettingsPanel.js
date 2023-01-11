@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
 import { Box } from '@mui/system'
-import { Tab, Tabs, Typography } from '@mui/material'
+import { Button, Tab, Tabs, Typography } from '@mui/material'
 
 import { useSelector, useDispatch } from 'react-redux'
 import SettingsPanelSettingsTab from './SettingsPanelSettingsTab';
+import SettingsPanelTestTab from './SettingsPanelTestTab';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,14 +41,14 @@ function SettingsPanel() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
         <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Settings" />
-          <Tab label="Info" />
+          <Tab label="Test" />
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
         <SettingsPanelSettingsTab />
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        Info
+        <SettingsPanelTestTab />
       </TabPanel>
     </Box>
   )
