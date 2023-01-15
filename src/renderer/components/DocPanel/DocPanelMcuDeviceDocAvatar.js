@@ -2,7 +2,8 @@ import { Avatar, Chip, Grid, Popover, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemForDownload } from '../../redux/downloadSlice';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
 
 function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
@@ -32,6 +33,9 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const dispatch = useDispatch()
+
   let sAvatarText;
   let sAvatarLongText;
   let color = '';
@@ -88,10 +92,13 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     setAnchorEl(null);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (sMxRepPathValid) {
-      ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
       console.log('exec ')
+      if (nStatus == -1) {
+        dispatch(addItemForDownload(oOneMcuDoc.displayName))
+      }
     } else {
       console.log('Missing path')
     }

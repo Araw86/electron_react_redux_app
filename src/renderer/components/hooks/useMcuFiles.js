@@ -50,9 +50,9 @@ export function useDatabasePath() {
   /* read sql data */
   async function readSqlData(dispatch) {
     const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
-    const sDeviceLineQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
+    const sDeviceLineQuery = 'SELECT DISTINCT rpn.rpn, rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
     const aDeviceLine = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDeviceLineQuery })
-    const sDeviceFamilyQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=119'
+    const sDeviceFamilyQuery = 'SELECT DISTINCT rpn.rpn,rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=119'
     const aDeviceFamily = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDeviceFamilyQuery })
     const sDocDsQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=23)'
     const aDocDs = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocDsQuery })
@@ -66,7 +66,7 @@ export function useDatabasePath() {
     const sDocAnQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19)'
     const aDocAn = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAnQuery })
 
-    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
+    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version, resource.path FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
     const aDocAll = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAllQuery });
 
     const oParsedSqlData = parseSqlFiles(aDeviceLine, aDeviceFamily, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
@@ -80,14 +80,17 @@ export function useDatabasePath() {
     let oParsedSqlData = { device: {}, line: {}, mcuDoc: {}, }
     /* parse devices and lines*/
     oParsedSqlData = aDeviceLine.reduce((oParsedSqlData, oDeviceLine) => {
-      oParsedSqlData.device[oDeviceLine.rpn] = { line: oDeviceLine.strValue };
-      oParsedSqlData.line[oDeviceLine.strValue] = { line: oDeviceLine.strValue, ds: [], rm: [], es: [], pm: [], an: [] }
+      /* removed coming soon device which dont have cdocumentation */
+      if (oDeviceLine.marketingStatus !== 'Coming soon') {
+        oParsedSqlData.device[oDeviceLine.rpn] = { line: oDeviceLine.strValue };
+        oParsedSqlData.line[oDeviceLine.strValue] = { line: oDeviceLine.strValue, ds: [], rm: [], es: [], pm: [], an: [] }
+      }
       return oParsedSqlData
     }, oParsedSqlData);
     /*parse documentation */
     oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
       if (!oParsedSqlData.mcuDoc.hasOwnProperty(oDoc.alternateName)) {
-        oParsedSqlData.mcuDoc[oDoc.alternateName] = { displayName: oDoc.alternateName, title: oDoc.description, versionNumber: oDoc.version, devices: [oDoc.rpn] }
+        oParsedSqlData.mcuDoc[oDoc.alternateName] = { displayName: oDoc.alternateName, title: oDoc.description, versionNumber: oDoc.version, devices: [oDoc.rpn], path: oDoc.path }
       } else {
         oParsedSqlData.mcuDoc[oDoc.alternateName].devices.push(oDoc.rpn)
       }
