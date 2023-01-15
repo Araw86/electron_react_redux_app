@@ -1,25 +1,30 @@
 import { Button, CircularProgress } from '@mui/material'
-import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux';
+import { createSerializableStateInvariantMiddleware } from '@reduxjs/toolkit';
+import React, { Fragment, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemForDownload } from '../redux/downloadSlice';
 
 function SettingsPanelTestTab() {
-  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid);
-  const sMxRepPath = useSelector((state) => state.configurationReducer.sMxRepPath);
 
+  const dispatch = useDispatch()
 
   const handleClick = () => {
-    if (sMxRepPathValid !== null) {
-
-      ipc_handlers.ipcToMainDownload({ type: 'pdf', name: 'MB1035-C1', address: 'https://www.st.com/resource/en/schematic_pack/mb1035-f303c-c01_schematic.pdf', location: sMxRepPath })
-    }
+    dispatch(addItemForDownload('test1'));
 
   }
+  // useEffect(() => {
+  //   console.log('handler log')
+
+  //   ipc_handlers.ipcToRendererDownload((event, value) => {
+  //     console.log(value)
+  //   })
+  // }, [])
   return (
     <Fragment>
       Test Tab
       <Button onClick={handleClick}>
         Test Download
-        <CircularProgress variant="determinate" value={25} size={20} />
+        <CircularProgress size={20} />
       </Button>
 
     </Fragment>

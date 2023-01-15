@@ -10,7 +10,9 @@ export async function ipcExeFile(sPath) {
   const bPathValid = await ipcFileExists(sPath);
   if (bPathValid) {
     await ipc_handlers.ipcTwoWay({ type: 5, data: sPath });
+    return 0;
   } else {
+    return -1;
     console.log('Wrong path')
   }
 }

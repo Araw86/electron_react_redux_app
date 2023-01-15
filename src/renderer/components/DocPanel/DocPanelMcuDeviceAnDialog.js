@@ -2,11 +2,12 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid
 import React, { Fragment, useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { yellow } from '@mui/material/colors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
 
 import SearchIcon from '@mui/icons-material/Search';
 import BackspaceIcon from '@mui/icons-material/Backspace';
+import { addItemForDownload } from '../../redux/downloadSlice';
 
 export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   const [open, setOpen] = useState(false);
@@ -82,10 +83,15 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
 
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
-  const handleClick = () => {
+
+  const dispatch = useDispatch()
+  const handleClick = async () => {
     if (sMxRepPathValid) {
-      ipcExeFile(sMxRepPathConf + '/' + oOneDoc.displayName + '.pdf');
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneDoc.displayName + '.pdf');
       console.log('exec ')
+      if (nStatus == -1) {
+        dispatch(addItemForDownload(oOneDoc.displayName))
+      }
     } else {
       console.log('Missing path')
     }

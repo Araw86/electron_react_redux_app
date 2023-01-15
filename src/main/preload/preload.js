@@ -24,5 +24,9 @@ contextBridge.exposeInMainWorld('ipc_handlers', {
   ipcToMainTest: (url) => ipcRenderer.send('download-button', url),
 
   ipcToMainDownload: (oInfo) => ipcRenderer.send('download-doc-start', oInfo),
-  ipcToRendererDownload: (callback) => ipcRenderer.on('download-doc-response', callback)
+  ipcToRendererDownload: (callback) => {
+    /* remove all listeners to be sure only one is active */
+    ipcRenderer.removeAllListeners('download-doc-response')
+    ipcRenderer.on('download-doc-response', callback)
+  }
 });

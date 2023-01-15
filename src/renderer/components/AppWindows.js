@@ -12,6 +12,7 @@ import DocPanel from "./DocPanel/DocPanel";
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import useConfig from "./hooks/useConfig";
+import { useDownload } from "./hooks/useDownload";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,6 +44,9 @@ function AppWindows() {
 
   useDatabasePath();
   useRepoPath();
+
+  useDownload()
+
   useEffect(() => {
     async function readVersion() {
       const appVersion = await ipc_handlers.ipcTwoWay({ type: 0 });

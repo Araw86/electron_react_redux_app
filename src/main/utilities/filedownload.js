@@ -14,12 +14,12 @@ async function manageDownload(type, name, address, location) {
   const sSrcPath = path.join(location, 'temp' + '.' + type)
   const sDestPath = path.join(location, name + '.' + type)
 
+  const win = BrowserWindow.getFocusedWindow()
   try {
     await fs.rename(sSrcPath, sDestPath)
-
-    console.log('rename ok')
+    sendInfoBack({ type: 0 })
   } catch (error) {
-    console.log('rename error')
+    sendInfoBack({ type: 1, error: error })
 
   }
 }
@@ -45,10 +45,9 @@ async function donwloadFile(address, location, tempFileName) {
 }
 
 
-function sendInfoBack() {
+function sendInfoBack(oResponse) {
   const win = BrowserWindow.getFocusedWindow();
-  win.webContents.send('download-doc-response', 'Msg A')
-
+  win.webContents.send('download-doc-response', oResponse)
 }
 
 
