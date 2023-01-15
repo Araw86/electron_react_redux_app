@@ -1,10 +1,11 @@
-const { app, ipcMain, dialog, BrowserWindow } = require('electron');
+const { app, ipcMain, dialog } = require('electron');
 
 const configurationfile = require('./utilities/configurationfile');
+const filedownload = require('./utilities/filedownload');
 const handlefiles = require('./utilities/handleFiles');
 const handlesql = require('./utilities/handlesql');
 
-const { download } = require('electron-dl');
+
 
 function ipcHandlers() {
   /*data send from rendered will be returned to main */
@@ -55,10 +56,9 @@ function ipcHandlers() {
     });
   });
   /*data send from rendered to main */
-  ipcMain.on('download-button', async (event, data) => {
-    console.log(data)
-    const win = BrowserWindow.getFocusedWindow();
-    console.log(await download(win, data, { overwrite: true }));
+  ipcMain.on('download-doc-start', async (event, data) => {
+    const { type, name, address, location } = data
+    filedownload.manageDownload(type, name, address, location)
   });
 };
 

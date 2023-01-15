@@ -21,5 +21,8 @@ contextBridge.exposeInMainWorld('ipc_handlers', {
   // we can also expose variables, not just functions
   ipcToRenderer: (callback) => ipcRenderer.on('receive-msg', callback),
 
-  ipcToMainTest: (url) => ipcRenderer.send('download-button', url)
+  ipcToMainTest: (url) => ipcRenderer.send('download-button', url),
+
+  ipcToMainDownload: (oInfo) => ipcRenderer.send('download-doc-start', oInfo),
+  ipcToRendererDownload: (callback) => ipcRenderer.on('download-doc-response', callback)
 });
