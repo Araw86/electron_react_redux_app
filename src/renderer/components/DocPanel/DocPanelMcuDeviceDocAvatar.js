@@ -1,7 +1,7 @@
-import { Avatar, Chip, Grid, Paper, Popover, Popper, Typography } from '@mui/material';
+import { Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemForDownload } from '../../redux/downloadSlice';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
@@ -32,13 +32,42 @@ export default DocPanelMcuDeviceDocAvatar;
 function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
+
+  const sDocFilterDevice = useSelector((state) => state.configurationReducer.sDocFilterDevice)
+
+  const aDownloadQueue = useSelector((state) => state.downloadReducer.aDownloadQueue)
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [display, setDisplay] = useState(null)
+  const [bDownload, setDownload] = useState(false)
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  useMemo(() => {
+    const bDisplay = oOneMcuDoc.devices.find((sDevice) =>
+      (sDevice.search(sDocFilterDevice.toUpperCase()) > -1)
+    )
+    if (bDisplay !== display) {
 
+      setDisplay(bDisplay)
+    }
+
+    const bDownloaded = aDownloadQueue.findIndex((sDoc) =>
+      (sDoc === oOneMcuDoc.displayName)
+    )
+    if (bDownloaded > -1) {
+      setDownload(true)
+    } else {
+      setDownload(false)
+    }
+
+  }, [sDocFilterDevice, aDownloadQueue])
+  if (display === undefined) {
+    return (<Fragment></Fragment>)
+  }
   let sAvatarText;
   let sAvatarLongText;
   let color = '';
+  let hColor = '';
   const open = Boolean(anchorEl);
   let aChipContent = [];
   switch (sDocType) {
@@ -47,10 +76,12 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
         sAvatarText = 'DS'
         sAvatarLongText = 'Datasheet'
         color = deepOrange[700];
+        hColor = deepOrange[900];
       } else {
         sAvatarText = 'DB'
         sAvatarLongText = 'Databreef'
         color = indigo[700];
+        hColor = indigo[900];
       }
       aChipContent = createChipContent(oOneMcuDoc)
       break;
@@ -62,17 +93,20 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
       sAvatarText = 'RM'
       sAvatarLongText = 'Reference manual'
       color = lightBlue[700];
+      hColor = lightBlue[900];
       aChipContent = createChipContent(oOneMcuDoc)
       break;
     case 'pm':
       sAvatarText = 'PM'
       sAvatarLongText = 'Programming manual'
       color = lightGreen[700];
+      hColor = lightGreen[900];
       break;
     case 'es':
       sAvatarText = 'ES'
       sAvatarLongText = 'Errata sheet'
       color = red[700];
+      hColor = red[900];
       aChipContent = createChipContent(oOneMcuDoc)
       break;
     default:
@@ -109,31 +143,39 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     <Fragment >
       <Grid item>
 
-        <Avatar sx={{ bgcolor: color }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{sAvatarText}</Avatar>
-        <Popper
-
+        <Avatar sx={{
+          bgcolor: color, ':hover': {
+            bgcolor: hColor
+          }
+        }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
+        <Popover
           id="mouse-over-popover"
           sx={{
             pointerEvents: 'none',
           }}
           open={open}
           anchorEl={anchorEl}
-          placement={'bottom-start'}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
           onClose={handlePopoverClose}
+          disableRestoreFocus
         >
+          <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
 
-          <Paper>
-            <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
-
-              <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
-              <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
-              <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
+            <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
+            <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
+            <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
 
 
-              {bAssignDevice ? aChipContent : <Fragment></Fragment>}
-            </Box>
-          </Paper>
-        </Popper>
+            {bAssignDevice ? aChipContent : <Fragment></Fragment>}
+          </Box>
+        </Popover>
       </Grid>
     </Fragment>
   );
