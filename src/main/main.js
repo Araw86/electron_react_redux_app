@@ -29,9 +29,14 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: true,
       enableRemoteModule: true,
+      autoHideMenuBar: true,
       preload: path.join(__dirname, 'preload/preload.js'),
     }
   });
+
+
+
+
   // /* menu to test ipcToRenderer */
   // const menu = Menu.buildFromTemplate([
   //   {

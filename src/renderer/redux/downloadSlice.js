@@ -58,6 +58,18 @@ const downloadSlice = createSlice({
         state.aDownloadQueue.splice(iArrayIndex, 1)
       }
     },
+    skipDownload: (state) => {
+      if ((state.iDownloadState == 2) && (state.aDownloadQueue.length > 0)) {
+        state.aDownloadQueue.shift()
+        state.sDownloading = null
+        /*indicate that download is stopped */
+        if (state.aDownloadQueue.length == 0) {
+          state.iDownloadState = 0
+        } else {
+          state.iDownloadState = 1
+        }
+      }
+    },
     startDownload: (state) => {
       if ((state.iDownloadState != 1) && (state.aDownloadQueue.length > 0)) {
         state.iDownloadState = 4;
@@ -72,6 +84,6 @@ const downloadSlice = createSlice({
   }
 });
 
-export const { itemDownloaded, itemDownloadError, downloadItem, addItemForDownload, removeItemFromDownload, startDownload, resetDownload } = downloadSlice.actions
+export const { itemDownloaded, itemDownloadError, downloadItem, addItemForDownload, removeItemFromDownload, skipDownload, startDownload, resetDownload } = downloadSlice.actions
 
 export default downloadSlice.reducer

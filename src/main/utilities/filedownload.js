@@ -15,10 +15,15 @@ async function manageDownload(type, name, address, location) {
   const sDestPath = path.join(location, name + '.' + type)
 
   const win = BrowserWindow.getFocusedWindow()
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
   try {
     await fs.rename(sSrcPath, sDestPath)
+    console.log('rename ok')
+    await delay(100)
     sendInfoBack({ type: 0 })
   } catch (error) {
+    console.log('rename error')
+    await delay(100)
     sendInfoBack({ type: 1, error: error })
 
   }
@@ -46,7 +51,8 @@ async function donwloadFile(address, location, tempFileName) {
 
 
 function sendInfoBack(oResponse) {
-  const win = BrowserWindow.getFocusedWindow();
+  const wins = BrowserWindow.getAllWindows();
+  const win = wins[0]
   win.webContents.send('download-doc-response', oResponse)
 }
 

@@ -9,7 +9,7 @@ function SettingsPanelTestTab() {
   const dispatch = useDispatch()
 
   const handleClick = () => {
-    // dispatch(addItemForDownload('test1'));
+    dispatch(addItemForDownload('RM0468'));
 
   }
   // useEffect(() => {

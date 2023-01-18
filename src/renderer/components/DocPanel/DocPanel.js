@@ -8,6 +8,7 @@ import DocPanelMcuDevice from './DocPanelMcuDevice';
 
 import { Stack } from '@mui/system';
 import DocPanelSearch from './DocPanelSearch';
+import DocPanelDownloadDialog from './DocPanelDownloadDialog';
 
 function DocPanel({ offsetWidth = 0 }) {
   const boxRef = useRef(null);
@@ -96,6 +97,7 @@ function DocPanel({ offsetWidth = 0 }) {
           {jMcuDevices}
         </Grid>
       </Box>
+      <DocPanelDownloadDialog />
     </Box>
   )
 }

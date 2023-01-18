@@ -7,6 +7,7 @@ export function useDownload() {
 
   const dispatch = useDispatch()
   const sDownloading = useSelector((state) => state.downloadReducer.sDownloading);
+  const iDownloadState = useSelector((state) => state.downloadReducer.iDownloadState);
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid);
   const sMxRepPath = useSelector((state) => state.configurationReducer.sMxRepPath);
   const oMcuDoc = useSelector((state) => {
@@ -21,13 +22,16 @@ export function useDownload() {
   console.log(oDownload)
   useEffect(() => {
     /*start bnew download on items in queue */
-    if ((sMxRepPathValid !== null) && (sDownloading !== null)) {
+    if ((sMxRepPathValid !== null) && (sDownloading !== null) && (iDownloadState != 2) && (iDownloadState != 0)) {
       dispatch(startDownload());
       console.log('download')
-      const sDownloadAddress = oMcuDoc[sDownloading].path;
-      ipc_handlers.ipcToMainDownload({ type: 'pdf', name: sDownloading, address: sDownloadAddress, location: sMxRepPath })
+      if (oMcuDoc !== null) {
+
+        const sDownloadAddress = oMcuDoc[sDownloading].path;
+        ipc_handlers.ipcToMainDownload({ type: 'pdf', name: sDownloading, address: sDownloadAddress, location: sMxRepPath })
+      }
     }
-  }, [sDownloading, sMxRepPathValid, dispatch])
+  }, [sDownloading, sMxRepPathValid, iDownloadState, dispatch])
   useEffect(() => {
     console.log('handler log')
 
