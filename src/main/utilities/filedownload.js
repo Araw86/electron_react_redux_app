@@ -46,9 +46,16 @@ async function possibleToWriteFile(sFilePath) {
 
 async function donwloadFile(address, location, tempFileName) {
   const win = BrowserWindow.getFocusedWindow();
-  await download(win, address, { directory: location, overwrite: true, filename: tempFileName });
+  await download(win, address, {
+    directory: location,
+    overwrite: true,
+    filename: tempFileName
+  });
 }
 
+const onProtessCb = (oDlInfo) => {
+  console.log(oDlInfo);
+}
 
 function sendInfoBack(oResponse) {
   const wins = BrowserWindow.getAllWindows();
