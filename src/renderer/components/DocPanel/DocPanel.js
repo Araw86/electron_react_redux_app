@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { AppBar, Box, Button, Grid, Tab, Tabs, TextField, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, Grid, IconButton, Tab, Tabs, TextField, Toolbar } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux'
 import useMcuDoc from './useMcuDoc';
@@ -9,6 +9,9 @@ import DocPanelMcuDevice from './DocPanelMcuDevice';
 import { Stack } from '@mui/system';
 import DocPanelSearch from './DocPanelSearch';
 import DocPanelDownloadDialog from './DocPanelDownloadDialog';
+
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import DocPanelDownload from './DocPanelDownload';
 
 function DocPanel({ offsetWidth = 0 }) {
   const boxRef = useRef(null);
@@ -82,17 +85,36 @@ function DocPanel({ offsetWidth = 0 }) {
 
   const appBarSx = { width: `calc(100% - ${offsetWidth}px)`, ml: `${offsetWidth}px` }
 
+
+  /* dl button */
+
+  const [openDl, setOpenDl] = useState(false);
+  const handleDlClick = () => {
+    setOpenDl(true)
+  }
+  const handleDlClose = () => {
+    setOpenDl(false)
+  }
+
+
   return (
     <Box ref={boxRef}>
       {/* // <Box ref={refCallback}> */}
       <AppBar position="fixed" sx={{ ...appBarSx }}>
         <Toolbar>
-          <DocPanelSearch />
+          <Box display='flex' flexGrow={1}>
+            <DocPanelSearch />
+          </Box>
+
+          <IconButton onClick={handleDlClick}>
+            <DownloadForOfflineIcon />
+          </IconButton>
         </Toolbar>
 
       </AppBar>
       <Box m={1}>
         <Toolbar />
+        <DocPanelDownload onClose={handleDlClose} open={openDl} />
         <Grid container justifyContent="center" spacing={2}>
           {jMcuDevices}
         </Grid>
