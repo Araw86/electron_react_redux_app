@@ -17,8 +17,13 @@ const { autoUpdater } = require("electron-updater")
 const ipc = require('./ipcHandlers.js');
 
 const electronDl = require('electron-dl');
+const storeHandling = require('./utilities/storeHandling.js');
 
 electronDl();
+
+storeHandling.addStore('test');
+storeHandling.storeSet('test', 'testProperty', 'vestValue')
+console.log(storeHandling.storeGet('test', 'testProperty'))
 
 async function createWindow() {
   // Create the browser window.
