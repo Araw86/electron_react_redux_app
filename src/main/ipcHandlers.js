@@ -4,6 +4,7 @@ const configurationfile = require('./utilities/configurationfile');
 const filedownload = require('./utilities/filedownload');
 const handlefiles = require('./utilities/handleFiles');
 const handlesql = require('./utilities/handlesql');
+const storeHandling = require('./utilities/storeHandling');
 
 
 
@@ -39,6 +40,21 @@ function ipcHandlers() {
         return null;
     }
   });
+
+  ipcMain.on('stores', (event, data) => {
+    switch (data.type) {
+      case 0:
+        return storeHandling.addStore(data.data)
+      case 1:
+        return storeHandling.storeSet(data.data)
+      case 2:
+        return storeHandling.storeGet(data.data)
+      case 3:
+        return storeHandling.eraseStore(data.data)
+      default:
+        return null;
+    }
+  })
 
   /*data send from rendered to main */
   ipcMain.on('write-message', (event, data) => {

@@ -28,5 +28,8 @@ contextBridge.exposeInMainWorld('ipc_handlers', {
     /* remove all listeners to be sure only one is active */
     ipcRenderer.removeAllListeners('download-doc-response')
     ipcRenderer.on('download-doc-response', callback)
+  },
+  ipcToStores: (data) => {
+    return ipcRenderer.invoke('stores,data')
   }
 });
