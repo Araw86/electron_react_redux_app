@@ -1,5 +1,5 @@
-import { Alert, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Snackbar, Stack, TextField } from '@mui/material'
-import React, { Fragment, useState } from 'react'
+import { Alert, Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Snackbar, Stack, TextField } from '@mui/material'
+import React, { Fragment, useMemo, useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { yellow } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -85,6 +85,9 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
 
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
   const sMxRepPathConf = useSelector((state) => state.configurationReducer.configuration.sMxRepPath)
+  const aDownloadQueue = useSelector((state) => state.downloadReducer.aDownloadQueue)
+
+  const [bDownload, setDownload] = useState(false)
 
   const dispatch = useDispatch()
   const handleClick = async () => {
@@ -99,6 +102,22 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
     }
   }
 
+  useMemo(() => {
+    const bDownloaded = aDownloadQueue.findIndex((sDoc) =>
+      (sDoc === oOneDoc.displayName)
+    )
+    if (bDownloaded > -1) {
+      setDownload(true)
+    } else {
+
+      if (bDownload) {
+        handleClick()
+      }
+      setDownload(false)
+    }
+
+  }, [aDownloadQueue])
+
   const [snackbarOpen, setSnackbarOpen] = useState(false)
 
   const handleRightClick = () => {
@@ -112,7 +131,7 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
       <ListItemButton onClick={handleClick} onContextMenu={handleRightClick}>
         <ListItemAvatar>
           <Avatar sx={{ bgcolor: yellow[700] }}>
-            AN
+            {bDownload ? <CircularProgress size={20} /> : 'AN'}
           </Avatar>
         </ListItemAvatar>
         <ListItemText sx={{ wordWrap: 'break-word', }} primary={oOneDoc.displayName + ' ver:' + oOneDoc.versionNumber} secondary={oOneDoc.title} />

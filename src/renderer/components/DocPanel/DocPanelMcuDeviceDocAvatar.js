@@ -45,6 +45,18 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
 
   const dispatch = useDispatch();
 
+  const handleClick = async () => {
+    if (sMxRepPathValid) {
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
+      console.log('exec ')
+      if (nStatus == -1) {
+        dispatch(addItemForDownload(oOneMcuDoc.displayName))
+      }
+    } else {
+      console.log('Missing path')
+    }
+  };
+
   useMemo(() => {
     const bDisplay = oOneMcuDoc.devices.find((sDevice) =>
       (sDevice.search(sDocFilterDevice.toUpperCase()) > -1)
@@ -60,10 +72,15 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     if (bDownloaded > -1) {
       setDownload(true)
     } else {
+
+      if (bDownload) {
+        handleClick()
+      }
       setDownload(false)
     }
 
   }, [sDocFilterDevice, aDownloadQueue])
+
   if (display === undefined) {
     return (<Fragment></Fragment>)
   }
@@ -129,17 +146,10 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     setAnchorEl(null);
   };
 
-  const handleClick = async () => {
-    if (sMxRepPathValid) {
-      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
-      console.log('exec ')
-      if (nStatus == -1) {
-        dispatch(addItemForDownload(oOneMcuDoc.displayName))
-      }
-    } else {
-      console.log('Missing path')
-    }
-  };
+
+
+
+
 
 
   const handleRightClick = () => {
