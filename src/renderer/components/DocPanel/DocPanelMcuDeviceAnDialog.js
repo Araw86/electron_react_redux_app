@@ -1,4 +1,4 @@
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Stack, TextField } from '@mui/material'
+import { Alert, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Snackbar, Stack, TextField } from '@mui/material'
 import React, { Fragment, useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { yellow } from '@mui/material/colors';
@@ -38,6 +38,8 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   } else {
     aFilteredDoc = oLine.an;
   }
+
+
 
   // const aDocuments = [];
   const aDocuments = aFilteredDoc.map((sDoc) => {
@@ -96,9 +98,18 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
       console.log('Missing path')
     }
   }
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+
+  const handleRightClick = () => {
+
+    setSnackbarOpen(true)
+    navigator.clipboard.writeText(oOneDoc.path);
+  }
+
   return (
     <ListItem disableGutters>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} onContextMenu={handleRightClick}>
         <ListItemAvatar>
           <Avatar sx={{ bgcolor: yellow[700] }}>
             AN
@@ -106,6 +117,13 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
         </ListItemAvatar>
         <ListItemText sx={{ wordWrap: 'break-word', }} primary={oOneDoc.displayName + ' ver:' + oOneDoc.versionNumber} secondary={oOneDoc.title} />
       </ListItemButton>
+      <Snackbar
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+        autoHideDuration={2000}
+      >
+        <Alert variant="filled" severity="info">Link stored to clipboard</Alert>
+      </Snackbar>
     </ListItem>
 
   );
