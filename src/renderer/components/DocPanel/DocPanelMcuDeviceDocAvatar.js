@@ -1,4 +1,4 @@
-import { Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Typography } from '@mui/material';
+import { Alert, Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Snackbar, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useMemo, useState } from 'react'
@@ -40,6 +40,9 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [display, setDisplay] = useState(null)
   const [bDownload, setDownload] = useState(false)
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+
   const dispatch = useDispatch();
 
   useMemo(() => {
@@ -139,6 +142,12 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   };
 
 
+  const handleRightClick = () => {
+
+    setSnackbarOpen(true)
+    navigator.clipboard.writeText(oOneMcuDoc.path);
+  }
+
   return (
     <Fragment >
       <Grid item>
@@ -147,7 +156,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
           bgcolor: color, ':hover': {
             bgcolor: hColor
           }
-        }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
+        }} onClick={handleClick} onContextMenu={handleRightClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
         <Popover
           id="mouse-over-popover"
           sx={{
@@ -176,6 +185,13 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
             {bAssignDevice ? aChipContent : <Fragment></Fragment>}
           </Box>
         </Popover>
+        <Snackbar
+          open={snackbarOpen}
+          onClose={() => setSnackbarOpen(false)}
+          autoHideDuration={2000}
+        >
+          <Alert variant="filled" severity="info">Link stored to clipboard</Alert>
+        </Snackbar>
       </Grid>
     </Fragment>
   );
