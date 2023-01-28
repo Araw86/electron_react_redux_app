@@ -21,12 +21,6 @@ const storeHandling = require('./utilities/storeHandling.js');
 
 electronDl();
 
-storeHandling.addStore('test');
-storeHandling.storeSet({ sStore: 'test', uProperty: 'testProperty', uValue: 'vestValue' })
-console.log(storeHandling.storeGet({ sStore: 'test', uProperty: 'testProperty' }))
-storeHandling.eraseStore('test')
-console.log(storeHandling.storeGet({ sStore: 'test', uProperty: 'testProperty' }))
-
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({

@@ -13,13 +13,18 @@ function SettingsPanelTestTab() {
     dispatch(addItemForDownload('RM0468'));
 
   }
-  // useEffect(() => {
-  //   console.log('handler log')
+  useEffect(() => {
+    console.log('handler log')
+    async function storeHandle() {
+      await ipc_handlers.ipcToStores({ type: 0, data: 'test' })
+      await ipc_handlers.ipcToStores({ type: 1, data: { sStore: 'test', uProperty: 'testProperty', uValue: 'vestValue' } })
+      console.log(await ipc_handlers.ipcToStores({ type: 2, data: { sStore: 'test', uProperty: 'testProperty' } }))
+      await ipc_handlers.ipcToStores({ type: 3, data: 'test' })
+    }
+    storeHandle()
+  }, [])
 
-  //   ipc_handlers.ipcToRendererDownload((event, value) => {
-  //     console.log(value)
-  //   })
-  // }, [])
+
   return (
     <Fragment>
       Test Tab

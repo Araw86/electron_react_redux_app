@@ -41,7 +41,7 @@ function ipcHandlers() {
     }
   });
 
-  ipcMain.on('stores', (event, data) => {
+  ipcMain.handle('stores', (event, data) => {
     switch (data.type) {
       case 0:
         return storeHandling.addStore(data.data)

@@ -30,6 +30,6 @@ contextBridge.exposeInMainWorld('ipc_handlers', {
     ipcRenderer.on('download-doc-response', callback)
   },
   ipcToStores: (data) => {
-    return ipcRenderer.invoke('stores,data')
+    return ipcRenderer.invoke('stores', data)
   }
 });
