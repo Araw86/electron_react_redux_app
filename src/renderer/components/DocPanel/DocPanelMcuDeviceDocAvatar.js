@@ -1,4 +1,4 @@
-import { Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Typography } from '@mui/material';
+import { Alert, Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Snackbar, Typography } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useMemo, useState } from 'react'
@@ -40,7 +40,22 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [display, setDisplay] = useState(null)
   const [bDownload, setDownload] = useState(false)
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+
   const dispatch = useDispatch();
+
+  const handleClick = async () => {
+    if (sMxRepPathValid) {
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
+      console.log('exec ')
+      if (nStatus == -1) {
+        dispatch(addItemForDownload(oOneMcuDoc.displayName))
+      }
+    } else {
+      console.log('Missing path')
+    }
+  };
 
   useMemo(() => {
     const bDisplay = oOneMcuDoc.devices.find((sDevice) =>
@@ -57,10 +72,15 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     if (bDownloaded > -1) {
       setDownload(true)
     } else {
+
+      if (bDownload) {
+        handleClick()
+      }
       setDownload(false)
     }
 
   }, [sDocFilterDevice, aDownloadQueue])
+
   if (display === undefined) {
     return (<Fragment></Fragment>)
   }
@@ -126,18 +146,17 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     setAnchorEl(null);
   };
 
-  const handleClick = async () => {
-    if (sMxRepPathValid) {
-      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
-      console.log('exec ')
-      if (nStatus == -1) {
-        dispatch(addItemForDownload(oOneMcuDoc.displayName))
-      }
-    } else {
-      console.log('Missing path')
-    }
-  };
 
+
+
+
+
+
+  const handleRightClick = () => {
+
+    setSnackbarOpen(true)
+    navigator.clipboard.writeText(oOneMcuDoc.path);
+  }
 
   return (
     <Fragment >
@@ -147,7 +166,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
           bgcolor: color, ':hover': {
             bgcolor: hColor
           }
-        }} onClick={handleClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
+        }} onClick={handleClick} onContextMenu={handleRightClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
         <Popover
           id="mouse-over-popover"
           sx={{
@@ -176,6 +195,13 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
             {bAssignDevice ? aChipContent : <Fragment></Fragment>}
           </Box>
         </Popover>
+        <Snackbar
+          open={snackbarOpen}
+          onClose={() => setSnackbarOpen(false)}
+          autoHideDuration={2000}
+        >
+          <Alert variant="filled" severity="info">Link stored to clipboard</Alert>
+        </Snackbar>
       </Grid>
     </Fragment>
   );
