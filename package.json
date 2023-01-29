@@ -65,6 +65,15 @@
     "directories": {
       "buildResources": "assets"
     },
+    "extraFiles": [
+      {
+        "from": "./build/database/",
+        "to": "database",
+        "filter": [
+          "*"
+        ]
+      }
+    ],
     "win": {
       "publish": {
         "provider": "github",

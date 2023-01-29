@@ -4,6 +4,8 @@ const { IgnorePlugin } = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const CopyPlugin = require('copy-webpack-plugin');
+
 /* ignore fsevents module which caused error in electron  */
 const optionalPlugins = [];
 if (process.platform !== "darwin") {
@@ -11,87 +13,98 @@ if (process.platform !== "darwin") {
 }
 
 
-module.exports = [{
-  mode: 'production',
-  entry: './src/renderer/index.js',
-  target: 'electron-renderer',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [[
-              '@babel/preset-env', {
-                targets: {
-                  esmodules: true
-                }
-              }],
-              '@babel/preset-react']
+module.exports = [
+  /*handle renderer */
+  {
+    mode: 'production',
+    entry: './src/renderer/index.js',
+    target: 'electron-renderer',
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [[
+                '@babel/preset-env', {
+                  targets: {
+                    esmodules: true
+                  }
+                }],
+                '@babel/preset-react']
+            }
           }
+        },
+        {
+          test: [/\.css$/i],
+          use: [
+            // Creates `style` nodes from JS strings
+            'style-loader',
+            // Translates CSS into CommonJS
+            'css-loader',
+          ],
+        },
+        {
+          test: [/\.s[ac]ss$/i],
+          use: [
+            // Creates `style` nodes from JS strings
+            'style-loader',
+            // Compiles Sass to CSS
+            'sass-loader',
+          ],
         }
-      },
-      {
-        test: [/\.css$/i],
-        use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
-          'css-loader',
-        ],
-      },
-      {
-        test: [/\.s[ac]ss$/i],
-        use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
-        ],
-      }
+      ]
+    },
+    resolve: {
+      extensions: ['.js', '.json', '.node'],
+    },
+    output: {
+      filename: 'app.js',
+      path: path.resolve(__dirname, 'build', 'renderer'),
+      clean: true
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: 'electron redux app',
+        filename: 'index.html',
+        template: 'src/renderer/index.html'
+      })
     ]
   },
-  resolve: {
-    extensions: ['.js', '.json', '.node'],
+  /*handle main */
+  {
+    mode: 'production',
+    entry: './src/main/main.js',
+    target: 'electron-main',
+    output: {
+      path: path.resolve(__dirname, 'build', 'main'),
+      // clean: true
+    },
+    plugins: [
+      ...optionalPlugins,
+    ],
+    externals: {
+      sqlite3: 'commonjs sqlite3',
+    },
   },
-  output: {
-    filename: 'app.js',
-    path: path.resolve(__dirname, 'build', 'renderer'),
-    clean: true
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'electron redux app',
-      filename: 'index.html',
-      template: 'src/renderer/index.html'
-    })
-  ]
-},
-{
-  mode: 'production',
-  entry: './src/main/main.js',
-  target: 'electron-main',
-  output: {
-    path: path.resolve(__dirname, 'build', 'main'),
-    // clean: true
-  },
-  plugins: [
-    ...optionalPlugins,
-  ],
-  externals: {
-    sqlite3: 'commonjs sqlite3',
-  },
-},
-{
-  mode: 'production',
-  entry: './src/main/preload/preload.js',
-  target: 'electron-preload',
-  output: {
-    path: path.join(__dirname, 'build', 'main', 'preload'),
-    filename: 'preload.js',
-    // clean: true
+  /*handle main preload */
+  {
+    mode: 'production',
+    entry: './src/main/preload/preload.js',
+    target: 'electron-preload',
+    output: {
+      path: path.join(__dirname, 'build', 'main', 'preload'),
+      filename: 'preload.js',
+      // clean: true
+    },
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          { from: "./database/*.json", to: path.resolve(__dirname, 'build') }
+        ],
+      })
+    ]
   }
-}
 ];

@@ -11,8 +11,12 @@ import DocPanel from "./DocPanel/DocPanel";
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import EditIcon from '@mui/icons-material/Edit';
+
 import useConfig from "./hooks/useConfig";
 import { useDownload } from "./hooks/useDownload";
+import ComposePanel from "./ComposePanel/ComposePanel";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -96,6 +100,7 @@ function AppWindows() {
           >
             <Tab icon={<TextSnippetIcon />} label="Doc" />
             <Tab icon={<SettingsIcon />} label="Settings" />
+            <Tab icon={<EditIcon />} label="Compose" />
           </Tabs>
         </Drawer>
       </Box>
@@ -107,6 +112,9 @@ function AppWindows() {
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <SettingsPanel />
+          </TabPanel>
+          <TabPanel value={tab} index={2}>
+            <ComposePanel />
           </TabPanel>
         </Box>
       </Box>
