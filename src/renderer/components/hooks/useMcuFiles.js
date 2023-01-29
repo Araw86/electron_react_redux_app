@@ -21,31 +21,6 @@ export function useDatabasePath() {
   });
 
   const bLocatedSqlFile = useSelector((state) => state.configurationReducer.bLocatedSqlFile)
-  useEffect(() => {
-    if (sCubemxfinderConfPath !== null) {
-      const sSqlPath = sCubemxfinderConfPath;
-      ipcFileExists(sSqlPath).then((bPathValid) => {
-        if (bPathValid) {
-          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPath', oValue: sSqlPath }));
-          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: true }));
-        } else {
-          dispatch(dispatchStateProp({ sProp: 'sCubemxfinderPathValid', oValue: false }));
-        }
-      })
-    }
-  }, [dispatch, sCubemxfinderConfPath, sCubemxfinderPath])
-
-  /* validate sql path */
-  useEffect(() => {
-    if (sCubemxfinderPath !== null) {
-      const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
-      ipcFileExists(sSqlPath).then((bPathValid) => {
-        if (bPathValid) {
-          dispatch(dispatchStateProp({ sProp: 'bLocatedSqlFile', oValue: true }));
-        }
-      })
-    }
-  }, [dispatch, sCubemxfinderPath]);
 
   /* read sql data */
   async function readSqlData(dispatch) {
@@ -124,34 +99,7 @@ export function useDatabasePath() {
       readSqlData(dispatch);
     }
   }, [dispatch, bLocatedSqlFile]);
-
-
 }
 
-export function useRepoPath() {
-  const dispatch = useDispatch();
-  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid);
-  const sMxRepPathConf = useSelector((state) => {
-    const oConf = state.configurationReducer.configuration;
-    if (oConf === undefined) {
-      return null;
-    }
-    return oConf.sMxRepPath;
-  });
-
-  useEffect(() => {
-    if (sMxRepPathConf !== null) {
-      ipcFileExists(sMxRepPathConf).then((bPathValid) => {
-        if (bPathValid) {
-          dispatch(dispatchStateProp({ sProp: 'sMxRepPath', oValue: sMxRepPathConf }));
-          dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: true }));
-        } else {
-          dispatch(dispatchStateProp({ sProp: 'sMxRepPathValid', oValue: false }));
-        }
-      })
-    }
-  }, [dispatch, sMxRepPathConf, sMxRepPathValid])
-
-}
 
 

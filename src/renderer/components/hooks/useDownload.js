@@ -19,7 +19,6 @@ export function useDownload() {
   })
 
   const oDownload = useSelector((state) => state.downloadReducer);
-  console.log(oDownload)
   useEffect(() => {
     /*start bnew download on items in queue */
     if ((sMxRepPathValid !== null) && (sDownloading !== null) && (iDownloadState != 2) && (iDownloadState != 0)) {
@@ -33,7 +32,6 @@ export function useDownload() {
     }
   }, [sDownloading, sMxRepPathValid, iDownloadState, dispatch])
   useEffect(() => {
-    console.log('handler log')
 
     ipc_handlers.ipcToRendererDownload((event, value) => {
       const { type, error } = value

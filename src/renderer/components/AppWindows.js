@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import SettingsPanel from "./SettingsPanel";
 
 
-import { useDatabasePath, useRepoPath } from "./hooks/useMcuFiles";
+import { useDatabasePath } from "./hooks/useMcuFiles";
 import DocPanel from "./DocPanel/DocPanel";
 
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -16,6 +16,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import useConfig from "./hooks/useConfig";
 import { useDownload } from "./hooks/useDownload";
 import ComposePanel from "./ComposePanel/ComposePanel";
+import { useRepoPath } from "./hooks/useRepoPath";
+import { useFinderPath } from "./hooks/useFinderPath";
+import { useSqlCheckState } from "./hooks/useSqlCheckState";
 
 
 function TabPanel(props) {
@@ -45,10 +48,18 @@ function AppWindows() {
 
   useConfig();
 
-
+  /* check if database path is valid */
   useDatabasePath();
+
+  /* check if repo path is valid */
   useRepoPath();
 
+  /*check if file path is valid */
+  useFinderPath();
+
+  useSqlCheckState();
+
+  /* handkle download state changes */
   useDownload()
 
   useEffect(() => {
