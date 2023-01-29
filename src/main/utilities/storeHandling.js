@@ -5,9 +5,18 @@ const app = require('electron').app
 
 let oStores = {}
 
+// const sAppPath = path.join(path.dirname(app.getPath('exe')), 'database');
+let sAppPath = app.getAppPath()
+let last = path.basename(sAppPath)
+console.log('last: ' + sAppPath)
+if (last.search('.asar') > -1) {
+  sAppPath = path.dirname(app.getPath('exe'))
+}
+sAppPath = path.join(sAppPath, 'database');
+console.log('Path to app: ' + sAppPath)
 const addStore = (sStore) => {
   try {
-    oStores[sStore] = new Store({ name: sStore })
+    oStores[sStore] = new Store({ name: sStore, cwd: sAppPath })
   } catch (error) {
     console.log(error)
     return -1
@@ -38,7 +47,6 @@ const eraseStore = (sStore) => {
     /* delete store object */
     delete oStores[sStore]
     /* delete store file */
-    const sAppPath = app.getPath('userData');
     const sFilePath = path.join(sAppPath, sStore + '.json')
     console.log(sFilePath)
     console.log(fs.unlinkSync(sFilePath))

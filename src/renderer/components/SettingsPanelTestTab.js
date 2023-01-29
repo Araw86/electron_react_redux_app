@@ -19,7 +19,7 @@ function SettingsPanelTestTab() {
       await ipc_handlers.ipcToStores({ type: 0, data: 'test' })
       await ipc_handlers.ipcToStores({ type: 1, data: { sStore: 'test', uProperty: 'testProperty', uValue: 'vestValue' } })
       console.log(await ipc_handlers.ipcToStores({ type: 2, data: { sStore: 'test', uProperty: 'testProperty' } }))
-      await ipc_handlers.ipcToStores({ type: 3, data: 'test' })
+      // await ipc_handlers.ipcToStores({ type: 3, data: 'test' })
     }
     storeHandle()
   }, [])

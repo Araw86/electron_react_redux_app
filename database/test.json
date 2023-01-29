@@ -1,3 +1,4 @@
 {
-  "test": "test message"
+	"test": "test message",
+	"testProperty": "vestValue"
 }
