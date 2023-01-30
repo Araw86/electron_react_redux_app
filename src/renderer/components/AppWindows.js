@@ -19,6 +19,7 @@ import ComposePanel from "./ComposePanel/ComposePanel";
 import { useRepoPath } from "./hooks/useRepoPath";
 import { useFinderPath } from "./hooks/useFinderPath";
 import { useSqlCheckState } from "./hooks/useSqlCheckState";
+import { useDbCacheUpdate } from "./hooks/useDbCacheUpdate";
 
 
 function TabPanel(props) {
@@ -57,7 +58,11 @@ function AppWindows() {
   /*check if file path is valid */
   useFinderPath();
 
+  /* check is is needed update cache */
   useSqlCheckState();
+
+  /* start db loading a cache update */
+  useDbCacheUpdate();
 
   /* handkle download state changes */
   useDownload()

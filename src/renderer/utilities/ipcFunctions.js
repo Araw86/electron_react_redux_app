@@ -20,3 +20,23 @@ export async function ipcExeFile(sPath) {
 export async function ipcSqlQuery(oSqlDetails) {
   return await ipc_handlers.ipcTwoWay({ type: 6, data: oSqlDetails });
 }
+
+
+/* store functions */
+
+export async function ipcAddStore(sStoreName) {
+  return await ipc_handlers.ipcToStores({ type: 0, data: sStoreName })
+}
+
+export async function ipcSetStore(sStoreName, uStoreProperty, uStoreValue) {
+  return await ipc_handlers.ipcToStores({ type: 1, data: { sStore: sStoreName, uProperty: uStoreProperty, uValue: uStoreValue } })
+}
+
+export async function ipcGetStore(sStoreName, uStoreProperty) {
+  return await ipc_handlers.ipcToStores({ type: 2, data: { sStore: sStoreName, uProperty: uStoreProperty } })
+}
+
+export async function ipcRemoveStore(sStoreName) {
+  return await ipc_handlers.ipcToStores({ type: 3, data: sStoreName })
+}
+
