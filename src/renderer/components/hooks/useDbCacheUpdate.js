@@ -24,23 +24,23 @@ export function useDbCacheUpdate() {
   /* read sql data */
   async function readSqlData(dispatch) {
     const sSqlPath = sCubemxfinderPath + '/plugins/mcufinder/mcu/cube-finder-db.db';
-    const sDeviceLineQuery = 'SELECT DISTINCT rpn.rpn, rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
+    const sDeviceLineQuery = 'SELECT rpn.rpn, rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117'
     const aDeviceLine = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDeviceLineQuery })
-    const sDeviceFamilyQuery = 'SELECT DISTINCT rpn.rpn,rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=119'
+    const sDeviceFamilyQuery = 'SELECT rpn.rpn,rpn.marketingStatus, rpn_has_attribute.strValue FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=119'
     const aDeviceFamily = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDeviceFamilyQuery })
-    const sDocDsQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=23)'
+    const sDocDsQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=23)'
     const aDocDs = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocDsQuery })
-    const sDocRmQuery = 'SELECT DISTINCT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=25)'
+    const sDocRmQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=25)'
     const aDocRm = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocRmQuery })
-    const sDocEsQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=22)'
+    const sDocEsQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=22)'
     const aDocEs = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocEsQuery })
-    const sDocPmQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=24)'
+    const sDocPmQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=24)'
     const aDocPm = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocPmQuery })
 
-    const sDocAnQuery = 'SELECT DISTINCT rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19)'
+    const sDocAnQuery = 'SELECT rpn.rpn, rpn_has_attribute.strValue ,resource.alternateName FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19)'
     const aDocAn = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAnQuery })
 
-    const sDocAllQuery = 'SELECT DISTINCT rpn.rpn, resource.alternateName, resource.description, resource.version, resource.path FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
+    const sDocAllQuery = 'SELECT rpn.rpn, resource.alternateName, resource.description, resource.version, resource.path FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
     const aDocAll = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAllQuery });
 
     const oParsedSqlData = parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
@@ -48,99 +48,84 @@ export function useDbCacheUpdate() {
       console.log(oParsedSqlData)
       // dispatch(dispatchStateProp({ sProp: 'oSqlParsedData', oValue: oParsedSqlData }))
     }
-    const oParsedSqlDataTest = parseSqlFilesTest(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
   }
 
   function parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll) {
-    let oParsedSqlData = { oDevice: {}, oLine: {}, oMcuDoc: {}, }
-    /* parse devices and lines*/
-    oParsedSqlData = aDeviceLine.reduce((oParsedSqlData, oDeviceLine) => {
-      /* removed coming soon device which dont have cdocumentation */
-      if (oDeviceLine.marketingStatus !== 'Coming soon') {
-        oParsedSqlData.oDevice[oDeviceLine.rpn] = { sLine: oDeviceLine.strValue };
-        oParsedSqlData.oLine[oDeviceLine.strValue] = { sLine: oDeviceLine.strValue, aDs: [], aRm: [], aEs: [], aPm: [], aAn: [] }
-      }
-      return oParsedSqlData
-    }, oParsedSqlData);
-    /*parse documentation */
-    oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
-      if (!oParsedSqlData.oMcuDoc.hasOwnProperty(oDoc.alternateName)) {
-        oParsedSqlData.oMcuDoc[oDoc.alternateName] = { sName: oDoc.alternateName, sTitle: oDoc.description, nVersion: oDoc.version, aDevices: [oDoc.rpn], sPath: oDoc.path }
-      } else {
-        oParsedSqlData.oMcuDoc[oDoc.alternateName].aDevices.push(oDoc.rpn)
-      }
-      return oParsedSqlData
-    }, oParsedSqlData)
-    oParsedSqlData = aDocDs.reduce((oParsedSqlData, oLineDoc) => {
-      oParsedSqlData.oLine[oLineDoc.strValue].aDs.push(oLineDoc.alternateName)
-      return oParsedSqlData
-    }, oParsedSqlData)
-    oParsedSqlData = aDocRm.reduce((oParsedSqlData, oLineDoc) => {
-      oParsedSqlData.oLine[oLineDoc.strValue].aRm.push(oLineDoc.alternateName)
-      return oParsedSqlData
-    }, oParsedSqlData)
-    oParsedSqlData = aDocEs.reduce((oParsedSqlData, oLineDoc) => {
-      oParsedSqlData.oLine[oLineDoc.strValue].aEs.push(oLineDoc.alternateName)
-      return oParsedSqlData
-    }, oParsedSqlData)
-    oParsedSqlData = aDocPm.reduce((oParsedSqlData, oLineDoc) => {
-      oParsedSqlData.oLine[oLineDoc.strValue].aPm.push(oLineDoc.alternateName)
-      return oParsedSqlData
-    }, oParsedSqlData)
-    oParsedSqlData = aDocAn.reduce((oParsedSqlData, oLineDoc) => {
-      oParsedSqlData.oLine[oLineDoc.strValue].aAn.push(oLineDoc.alternateName)
-      return oParsedSqlData
-    }, oParsedSqlData)
-    return oParsedSqlData;
-  }
-
-  function parseSqlFilesTest(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll) {
-    console.log(aDocDs)
     let oParsedSqlData = { oDevices: {}, oDsGroup: {}, oGroups: {}, oMcuDoc: {}, }
-    /* parse devices and lines*/
+    /* parse DS group and groups*/
     oParsedSqlData = aDocDs.reduce((oParsedSqlData, oLineDoc) => {
       if (!oParsedSqlData.oDsGroup.hasOwnProperty(oLineDoc.alternateName)) {
-        oParsedSqlData.oDsGroup[oLineDoc.alternateName] = { sName: oLineDoc.alternateName, aDevices: [oLineDoc.rpn], sGroup: oLineDoc.strValue }
+        oParsedSqlData.oDsGroup[oLineDoc.alternateName] = { sName: oLineDoc.alternateName, aDevices: [oLineDoc.rpn], sGroup: oLineDoc.strValue, oRm: {}, oEs: {}, oPm: {}, oAn: {} }
       } else {
         oParsedSqlData.oDsGroup[oLineDoc.alternateName].aDevices.push(oLineDoc.rpn)
       }
+      oParsedSqlData.oGroups[oLineDoc.strValue] = { sName: oLineDoc.strValue }
+      if (!oParsedSqlData.oDevices.hasOwnProperty(oLineDoc.rpn)) {
+        oParsedSqlData.oDevices[oLineDoc.rpn] = { sDsGroup: {} }
+        oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup[oLineDoc.alternateName] = { oName: oLineDoc.alternateName }
+      } else {
+        oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup[oLineDoc.alternateName] = { oName: oLineDoc.alternateName }
+      }
       return oParsedSqlData
     }, oParsedSqlData)
-    console.log(oParsedSqlData)
 
-    // oParsedSqlData = aDeviceLine.reduce((oParsedSqlData, oDeviceLine) => {
-    //   /* removed coming soon device which dont have cdocumentation */
-    //   if (oDeviceLine.marketingStatus !== 'Coming soon') {
-    //     oParsedSqlData.oDevice[oDeviceLine.rpn] = { sLine: oDeviceLine.strValue };
-    //     oParsedSqlData.oLine[oDeviceLine.strValue] = { sLine: oDeviceLine.strValue, aDs: [], aRm: [], aEs: [], aPm: [], aAn: [] }
-    //   }
-    //   return oParsedSqlData
-    // }, oParsedSqlData);
-    // /*parse documentation */
-    // oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
-    //   if (!oParsedSqlData.oMcuDoc.hasOwnProperty(oDoc.alternateName)) {
-    //     oParsedSqlData.oMcuDoc[oDoc.alternateName] = { sName: oDoc.alternateName, sTitle: oDoc.description, nVersion: oDoc.version, aDevices: [oDoc.rpn], sPath: oDoc.path }
-    //   } else {
-    //     oParsedSqlData.oMcuDoc[oDoc.alternateName].aDevices.push(oDoc.rpn)
-    //   }
-    //   return oParsedSqlData
-    // }, oParsedSqlData)
-    // oParsedSqlData = aDocRm.reduce((oParsedSqlData, oLineDoc) => {
-    //   oParsedSqlData.oLine[oLineDoc.strValue].aRm.push(oLineDoc.alternateName)
-    //   return oParsedSqlData
-    // }, oParsedSqlData)
-    // oParsedSqlData = aDocEs.reduce((oParsedSqlData, oLineDoc) => {
-    //   oParsedSqlData.oLine[oLineDoc.strValue].aEs.push(oLineDoc.alternateName)
-    //   return oParsedSqlData
-    // }, oParsedSqlData)
-    // oParsedSqlData = aDocPm.reduce((oParsedSqlData, oLineDoc) => {
-    //   oParsedSqlData.oLine[oLineDoc.strValue].aPm.push(oLineDoc.alternateName)
-    //   return oParsedSqlData
-    // }, oParsedSqlData)
-    // oParsedSqlData = aDocAn.reduce((oParsedSqlData, oLineDoc) => {
-    //   oParsedSqlData.oLine[oLineDoc.strValue].aAn.push(oLineDoc.alternateName)
-    //   return oParsedSqlData
-    // }, oParsedSqlData)
+    /*assign RM to DS group*/
+    oParsedSqlData = aDocRm.reduce((oParsedSqlData, oLineDoc) => {
+      try {
+        const dsGroups = oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup;
+        const dsGroupNames = Object.keys(dsGroups)
+        dsGroupNames.forEach((dsGroup) => {
+          oParsedSqlData.oDsGroup[dsGroup].oRm[oLineDoc.alternateName] = { sName: oLineDoc.alternateName }
+        })
+      } catch (error) {
+        console.log('This rpn: ' + oLineDoc.rpn + ' have no DS defined !!! Report it ')
+      }
+
+      return oParsedSqlData
+    }, oParsedSqlData)
+
+
+    oParsedSqlData = aDocEs.reduce((oParsedSqlData, oLineDoc) => {
+      try {
+        const dsGroups = oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup;
+        const dsGroupNames = Object.keys(dsGroups)
+        dsGroupNames.forEach((dsGroup) => {
+          oParsedSqlData.oDsGroup[dsGroup].oEs[oLineDoc.alternateName] = { sName: oLineDoc.alternateName }
+        })
+      } catch (error) {
+        console.log('This rpn: ' + oLineDoc.rpn + ' have no DS defined !!! Report it ')
+      }
+
+      return oParsedSqlData
+    }, oParsedSqlData)
+
+    oParsedSqlData = aDocPm.reduce((oParsedSqlData, oLineDoc) => {
+      try {
+        const dsGroups = oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup;
+        const dsGroupNames = Object.keys(dsGroups)
+        dsGroupNames.forEach((dsGroup) => {
+          oParsedSqlData.oDsGroup[dsGroup].oPm[oLineDoc.alternateName] = { sName: oLineDoc.alternateName }
+        })
+      } catch (error) {
+        console.log('This rpn: ' + oLineDoc.rpn + ' have no DS defined !!! Report it ')
+      }
+
+      return oParsedSqlData
+    }, oParsedSqlData)
+
+    oParsedSqlData = aDocAn.reduce((oParsedSqlData, oLineDoc) => {
+      try {
+        const dsGroups = oParsedSqlData.oDevices[oLineDoc.rpn].sDsGroup;
+        const dsGroupNames = Object.keys(dsGroups)
+        dsGroupNames.forEach((dsGroup) => {
+          oParsedSqlData.oDsGroup[dsGroup].oAn[oLineDoc.alternateName] = { sName: oLineDoc.alternateName }
+        })
+      } catch (error) {
+        console.log('This rpn: ' + oLineDoc.rpn + ' have no DS defined !!! Report it ')
+      }
+
+      return oParsedSqlData
+    }, oParsedSqlData)
     return oParsedSqlData;
   }
 
