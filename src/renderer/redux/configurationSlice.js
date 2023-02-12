@@ -12,7 +12,8 @@ const initialState = {
   sMxRepPath: null,
   sDocFilterDevice: '',
   oSqlParsedData: null,
-  bCacheUpdate: false
+  bCacheUpdate: false,
+  oMcuDataCache: null
 }
 
 export const configurationSlice = createSlice({
@@ -51,6 +52,7 @@ export const configurationSlice = createSlice({
       state.sMxRepPath = null;
       state.oSqlParsedData = null;
       state.bCacheUpdate = false;
+      state.oMcuDataCache = null;
       // return state;
     }
   }

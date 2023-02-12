@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { dispatchStateProp } from "../../redux/configurationSlice";
-import { ipcFileExists, ipcSqlQuery } from "../../utilities/ipcFunctions";
+import { ipcFileExists, ipcGetStore, ipcSetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
 
 
 export function useDbCacheUpdate() {
@@ -43,10 +43,16 @@ export function useDbCacheUpdate() {
     const sDocAllQuery = 'SELECT rpn.rpn, resource.alternateName, resource.description, resource.version, resource.path FROM rpn JOIN  rpn_has_attribute ON rpn.id= rpn_has_attribute.rpn_id JOIN rpn_has_resource ON rpn.id = rpn_has_resource.rpn_id JOIN resource ON rpn_has_resource.resource_id = resource.id WHERE (rpn.class_id=1734 OR rpn.class_id=1738 OR rpn.class_id=2319) AND rpn_has_attribute.attribute_id=117 AND (rpn_has_resource.subcategory_id=19 OR rpn_has_resource.subcategory_id=22 OR rpn_has_resource.subcategory_id=23 OR rpn_has_resource.subcategory_id=24 OR rpn_has_resource.subcategory_id=25)'
     const aDocAll = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDocAllQuery });
 
+    const sDbversionQuery = 'SELECT * FROM version'
+    const aDbVersion = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDbversionQuery })
+    const nDbLastRefresh = aDbVersion[0].latest_data_refresh;
+
     const oParsedSqlData = parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
     if (oParsedSqlData !== null) {
       console.log(oParsedSqlData)
-      // dispatch(dispatchStateProp({ sProp: 'oSqlParsedData', oValue: oParsedSqlData }))
+      await ipcSetStore('finderCacheStore', 'nUpdateTime', nDbLastRefresh)
+      await ipcSetStore('finderCacheStore', 'oMcuData', oParsedSqlData)
+      dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData }))
     }
   }
 

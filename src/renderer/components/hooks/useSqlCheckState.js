@@ -17,8 +17,9 @@ export function useSqlCheckState() {
     const aDbVersion = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDbversionQuery })
     const oDbVersion = aDbVersion[0];
 
-    const nDbLastRefresh = oDbVersion.oDbVersion
+    const nDbLastRefresh = oDbVersion.latest_data_refresh
     console.log(oDbVersion)
+    console.log(nDbLastRefresh)
     /* store state */
     await ipcAddStore('finderCacheStore')
     const nUpdateTime = await ipcGetStore('finderCacheStore', 'nUpdateTime')
@@ -30,6 +31,10 @@ export function useSqlCheckState() {
       /* refresh database */
       dispatch(dispatchStateProp({ sProp: 'bCacheUpdate', oValue: true }))
     } else {
+      console.log('cache load')
+      const oMcuDataCache = await ipcGetStore('finderCacheStore', 'oMcuData')
+      console.log(oMcuDataCache)
+      dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oMcuDataCache }))
 
     }
 
