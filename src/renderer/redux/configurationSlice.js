@@ -13,7 +13,11 @@ const initialState = {
   sDocFilterDevice: '',
   oSqlParsedData: null,
   bCacheUpdate: false,
-  oMcuDataCache: null
+  oMcuDataCache: null,
+
+  bLoadDbFiles: false,
+  aDbFiles: null
+
 }
 
 export const configurationSlice = createSlice({
@@ -53,6 +57,8 @@ export const configurationSlice = createSlice({
       state.oSqlParsedData = null;
       state.bCacheUpdate = false;
       state.oMcuDataCache = null;
+      state.bLoadDbFiles = false;
+      state.aDbFiles = null;
       // return state;
     }
   }
