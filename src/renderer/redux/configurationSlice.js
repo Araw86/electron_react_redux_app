@@ -15,6 +15,7 @@ const initialState = {
   bCacheUpdate: false,
   oMcuDataCache: null,
 
+  /*database store files */
   bLoadDbFiles: false,
   aDbFiles: null
 

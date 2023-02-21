@@ -17,7 +17,6 @@ function useConfig() {
     }
   }, []);
 
-
   /* handle the configuration change */
   useEffect(() => {
     /*config changes */

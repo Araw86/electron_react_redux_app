@@ -20,6 +20,7 @@ import { useRepoPath } from "./hooks/useRepoPath";
 import { useFinderPath } from "./hooks/useFinderPath";
 import { useSqlCheckState } from "./hooks/useSqlCheckState";
 import { useDbCacheUpdate } from "./hooks/useDbCacheUpdate";
+import useConfigDb from "./hooks/useConfigDb";
 
 
 function TabPanel(props) {
@@ -66,6 +67,8 @@ function AppWindows() {
 
   /* handkle download state changes */
   useDownload()
+
+  useConfigDb()
 
   useEffect(() => {
     async function readVersion() {
