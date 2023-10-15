@@ -5,6 +5,7 @@ import { configurationLoad, configurationSave } from '../../utilities/configLoad
 
 function useConfigDb() {
   const configLoadStatus = useSelector((state) => state.configurationReducer.configLoadStatus)
+  const configurationReducer = useSelector((state) => state.configurationReducer)
   const aDbFiles = useSelector((state) => {
 
     if ((state.configurationReducer.configuration === undefined)) {
@@ -15,6 +16,7 @@ function useConfigDb() {
 
   const dispatch = useDispatch();
 
+  console.log(configurationReducer)
   /* handle the configuration change */
   useEffect(() => {
     /*config changes */
@@ -22,7 +24,9 @@ function useConfigDb() {
       console.log(aDbFiles);
       if (aDbFiles === undefined) {
         console.log('aDbFiles udefined');
+        /*create empty database array */
       }
+
     }
 
   }, [dispatch, aDbFiles, configLoadStatus]);
