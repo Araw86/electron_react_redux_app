@@ -1,5 +1,5 @@
 import { Alert, Avatar, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Snackbar, Stack, TextField } from '@mui/material'
-import React, { Fragment, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { yellow } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,14 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   const [open, setOpen] = useState(false);
   const [sSearchValue, setSearchValue] = useState('')
 
+  const sarchAnRef = useRef(null);
+
   const handleClose = () => {
     setOpen(false);
   }
 
   const handleOpen = () => {
+
     setOpen(true);
   }
 
@@ -25,22 +28,41 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
     setSearchValue(oEvent.target.value)
   }
   const handleSearchClear = () => {
+    sarchAnRef.current.focus();
     setSearchValue('')
   }
+  // console.log(oLine);
+  // console.log(oMcuDoc)
+
+  const aLineAn = useMemo(() => {
+    return oLine.an.map((sAnName) => {
+      return oMcuDoc[sAnName]
+    })
+  }
+    , []
+  );
+  // console.log(aLineAn);
   let aFilteredDoc = []
   if (sSearchValue !== '') {
+    /* search over AN names */
     aFilteredDoc = oLine.an.reduce((aFilteredDoc, sDoc) => {
       if (sDoc.search(sSearchValue.toUpperCase()) !== -1) {
         aFilteredDoc.push(sDoc)
       }
       return aFilteredDoc;
     }, [])
+    /*search over AN titles */
+    aFilteredDoc = aLineAn.reduce((aFilteredDoc, oLineAn) => {
+      if ((oLineAn.title.toUpperCase()).search(sSearchValue.toUpperCase()) !== -1) {
+        if ((aFilteredDoc.length == 0) || !aFilteredDoc.includes(oLineAn.displayName)) {
+          aFilteredDoc.push(oLineAn.displayName)
+        }
+      }
+      return aFilteredDoc;
+    }, aFilteredDoc)
   } else {
     aFilteredDoc = oLine.an;
   }
-
-
-
   // const aDocuments = [];
   const aDocuments = aFilteredDoc.map((sDoc) => {
     return <DocPanelMcuDeviceAnDialogItem key={sDoc} oOneDoc={oMcuDoc[sDoc]} />
@@ -50,7 +72,7 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
       <IconButton aria-label="settings" onClick={handleOpen}>
         <MoreVertIcon />
       </IconButton>
-      <Dialog onClose={handleClose} open={open} scroll={'paper'}>
+      <Dialog onClose={handleClose} open={open} scroll={'paper'} disableRestoreFocus>
         <DialogTitle>
           <Stack direction="row" justifyContent="space-between"
             alignItems="center" spacing={1}>
@@ -58,7 +80,7 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
             Other Documentation
             <Stack direction="row" alignItems="center" spacing={1}>
               <SearchIcon />
-              <TextField size="small" onChange={handleChange} value={sSearchValue}></TextField>
+              <TextField size="small" onChange={handleChange} value={sSearchValue} inputRef={sarchAnRef} autoFocus={true}></TextField>
               <IconButton aria-label="Example" onClick={handleSearchClear}>
                 <BackspaceIcon />
               </IconButton>

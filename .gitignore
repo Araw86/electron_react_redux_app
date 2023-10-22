@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+#database
+/database
+
 # production
 /build
 /dist
