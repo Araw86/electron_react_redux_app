@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcAddStore, ipcGetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
 
-
+/**
+ * check if we have stored db in cache. If not load the db db file. Or if the db file have newer version it will update the cache
+ */
 export function useSqlCheckState() {
   const dispatch = useDispatch();
 
@@ -31,6 +33,7 @@ export function useSqlCheckState() {
       /* refresh database */
       dispatch(dispatchStateProp({ sProp: 'bCacheUpdate', oValue: true }))
     } else {
+      /* load cache */
       console.log('cache load')
       const oMcuDataCache = await ipcGetStore('finderCacheStore', 'oMcuData')
       console.log(oMcuDataCache)

@@ -44,6 +44,12 @@ async function possibleToWriteFile(sFilePath) {
   return true;
 }
 
+/**
+ * Function will download the file from web and store it on disc
+ * @param {string} address - wherte the file is located on web
+ * @param {string} location - whete to store the file
+ * @param {string} tempFileName - how the stored file will be named 
+ */
 async function donwloadFile(address, location, tempFileName) {
   const win = BrowserWindow.getFocusedWindow();
   await download(win, address, {
