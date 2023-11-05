@@ -18,7 +18,7 @@ async function manageDownload(type, name, address, location) {
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
   try {
     await fs.rename(sSrcPath, sDestPath)
-    console.log('rename ok')
+    console.log('rename ok');
     await delay(100)
     sendInfoBack({ type: 0 })
   } catch (error) {

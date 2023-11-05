@@ -2,6 +2,11 @@ const fs = require('fs');
 const path = require('path').win32;
 const { shell } = require('electron')
 
+/**
+ * open file on path and read its content
+ * @param {string} sFilePath - path to file 
+ * @returns null|string null if errro, if success return read data
+ */
 function loadFile(sFilePath) {
   try {
     /*solve issue of home dir */
@@ -16,6 +21,11 @@ function loadFile(sFilePath) {
 
 }
 
+/**
+ * check if the file in path exists
+ * @param {string} sFilePath -path to file 
+ * @returns null|boolean value if path exists
+ */
 function pathExists(sFilePath) {
   try {
     /*solve issue of home dir */
@@ -28,6 +38,11 @@ function pathExists(sFilePath) {
   }
 }
 
+/**
+ * execute the file on specified path. it will open the pdf if targeted
+ * @param {string} sFilePath - path to file 
+ * @returns 
+ */
 function runFile(sFilePath) {
   try {
     shell.openPath(path.resolve(sFilePath))
