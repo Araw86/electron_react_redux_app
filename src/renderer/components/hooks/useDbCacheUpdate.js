@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcFileExists, ipcGetStore, ipcSetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
 
-
+/* the db cache need to be updated or created so we read the db file and update the cache */
 export function useDbCacheUpdate() {
   const dispatch = useDispatch();
 
@@ -50,12 +50,26 @@ export function useDbCacheUpdate() {
     const oParsedSqlData = parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
     if (oParsedSqlData !== null) {
       console.log(oParsedSqlData)
+      /* stiore the new db cache time */
       await ipcSetStore('finderCacheStore', 'nUpdateTime', nDbLastRefresh)
+      /* store the new db cache data */
       await ipcSetStore('finderCacheStore', 'oMcuData', oParsedSqlData)
+      /* send new db cache data to store */
       dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData }))
     }
   }
 
+  /**
+   * function take infromation about documentation and parse it to object
+   * @param {array} aDeviceLine 
+   * @param {array} aDocDs 
+   * @param {array} aDocRm 
+   * @param {array} aDocEs 
+   * @param {array} aDocPm 
+   * @param {array} aDocAn 
+   * @param {array} aDocAll 
+   * @returns object with parsed documentation data
+   */
   function parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll) {
     let oParsedSqlData = { oDevices: {}, oDsGroup: {}, oGroups: {}, oMcuDoc: {}, }
     /* parse DS group and groups*/
