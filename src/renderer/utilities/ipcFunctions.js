@@ -40,3 +40,12 @@ export async function ipcRemoveStore(sStoreName) {
   return await ipc_handlers.ipcToStores({ type: 3, data: sStoreName })
 }
 
+export async function ipcDocFilesStat(sFilePath) {
+  return await ipc_handlers.ipcToDocFiles({ type: 0, data: sFilePath })
+}
+
+export async function ipcDocFilesMeta(sFilePath) {
+  return await ipc_handlers.ipcToDocFiles({ type: 1, data: sFilePath })
+}
+
+

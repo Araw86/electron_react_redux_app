@@ -31,5 +31,8 @@ contextBridge.exposeInMainWorld('ipc_handlers', {
   },
   ipcToStores: (data) => {
     return ipcRenderer.invoke('stores', data)
+  },
+  ipcToDocFiles: (data) => {
+    return ipcRenderer.invoke('docFiles', data)
   }
 });

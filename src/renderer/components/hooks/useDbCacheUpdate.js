@@ -147,18 +147,26 @@ export function useDbCacheUpdate() {
       return oParsedSqlData
     }, oParsedSqlData)
 
+    // // store also link to device
+    // oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
+    //   if (!oParsedSqlData.oMcuDoc.hasOwnProperty(oDoc.alternateName)) {
+    //     oParsedSqlData.oMcuDoc[oDoc.alternateName] = { sName: oDoc.alternateName, sTitle: oDoc.description, sVersion: oDoc.version, sDevice: [oDoc.rpn], sPath: oDoc.path }
+    //   } else {
+    //     oParsedSqlData.oMcuDoc[oDoc.alternateName].sDevice.push(oDoc.rpn)
+    //   }
+    //   return oParsedSqlData
+    // }, oParsedSqlData)
+
+    //without device link
     oParsedSqlData = aDocAll.reduce((oParsedSqlData, oDoc) => {
       if (!oParsedSqlData.oMcuDoc.hasOwnProperty(oDoc.alternateName)) {
-        oParsedSqlData.oMcuDoc[oDoc.alternateName] = { sName: oDoc.alternateName, sTitle: oDoc.description, sVersion: oDoc.version, sDevice: [oDoc.rpn], sPath: oDoc.path }
-      } else {
-        oParsedSqlData.oMcuDoc[oDoc.alternateName].sDevice.push(oDoc.rpn)
+        oParsedSqlData.oMcuDoc[oDoc.alternateName] = { sName: oDoc.alternateName, sTitle: oDoc.description, sVersion: oDoc.version, sPath: oDoc.path }
       }
       return oParsedSqlData
     }, oParsedSqlData)
 
     return oParsedSqlData;
   }
-
 
   useEffect(() => {
     if (bCacheUpdate === true) {

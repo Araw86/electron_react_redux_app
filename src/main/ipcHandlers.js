@@ -5,6 +5,7 @@ const filedownload = require('./utilities/filedownload');
 const handlefiles = require('./utilities/handleFiles');
 const handlesql = require('./utilities/handlesql');
 const storeHandling = require('./utilities/storeHandling');
+const docDetailsCheck = require('./utilities/docDetailsCheck');
 
 
 
@@ -40,6 +41,17 @@ function ipcHandlers() {
         return null;
     }
   });
+
+  ipcMain.handle('docFiles', (event, data) => {
+    switch (data.type) {
+      case 0:
+        return docDetailsCheck.checkPdfMetaDate(data.data)
+      case 1:
+        return docDetailsCheck.checkPdfMetaDate(data.data)
+      default:
+        return null;
+    }
+  })
 
   ipcMain.handle('stores', (event, data) => {
     switch (data.type) {

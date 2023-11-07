@@ -1,12 +1,15 @@
 
 
 
-function checkFileStat(docName) {
-
+function checkFileStatDate(docName) {
+  return null
 }
 
 
 
-function checkPdfMeta(pdfName) {
-
+function checkPdfMetaDate(pdfName) {
+  return null
 }
+
+const docDetailsCheck = { checkPdfMetaDate, checkFileStatDate }
+module.exports = docDetailsCheck;
