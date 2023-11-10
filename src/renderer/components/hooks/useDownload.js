@@ -11,11 +11,11 @@ export function useDownload() {
   const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid);
   const sMxRepPath = useSelector((state) => state.configurationReducer.sMxRepPath);
   const oMcuDoc = useSelector((state) => {
-    const oSqlParsedData = state.configurationReducer.oSqlParsedData
-    if ((oSqlParsedData === undefined) || (oSqlParsedData === null)) {
+    const oMcuDataCache = state.configurationReducer.oMcuDataCache
+    if ((oMcuDataCache === undefined) || (oMcuDataCache === null)) {
       return null;
     }
-    return oSqlParsedData.mcuDoc;
+    return oMcuDataCache.oMcuDoc;
   })
 
   const oDownload = useSelector((state) => state.downloadReducer);
@@ -26,7 +26,7 @@ export function useDownload() {
       console.log('download')
       if (oMcuDoc !== null) {
 
-        const sDownloadAddress = oMcuDoc[sDownloading].path;
+        const sDownloadAddress = oMcuDoc[sDownloading].sPath;
         ipc_handlers.ipcToMainDownload({ type: 'pdf', name: sDownloading, address: sDownloadAddress, location: sMxRepPath })
       }
     }

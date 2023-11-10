@@ -18,27 +18,28 @@ function DocPanel({ offsetWidth = 0 }) {
   const sDocFilterDevice = useSelector((state) => state.configurationReducer.sDocFilterDevice);
 
 
-  const mcuInfo = useSelector((state) => state.configurationReducer.oSqlParsedData);
+  const oMcuInfo = useSelector((state) => state.configurationReducer.oSqlParsedData);
+  const oMcuInfoCache = useSelector((state) => state.configurationReducer.oMcuDataCache);
 
 
   let jMcuDevices = [];
   let filteredLines = {};
-  if (mcuInfo !== null) {
+  if (oMcuInfo !== null && oMcuInfoCache !== null) {
     if (sDocFilterDevice !== '') {
-      const aDevices = Object.keys(mcuInfo.device);
+      const aDevices = Object.keys(oMcuInfo.device);
       filteredLines = aDevices.reduce((oReducedLines, sDevice) => {
         if (sDevice.search(sDocFilterDevice.toUpperCase()) !== -1) {
-          oReducedLines[mcuInfo.device[sDevice].line] = true;
+          oReducedLines[oMcuInfo.device[sDevice].line] = true;
         }
         return oReducedLines;
       }, {})
     } else {
-      filteredLines = mcuInfo.line;
+      filteredLines = oMcuInfo.line;
     }
 
     Object.keys(filteredLines).forEach(sKey => {
-      const oLine = mcuInfo.line[sKey]
-      jMcuDevices.push(<DocPanelMcuDevice key={oLine.line} oLine={oLine} mcuDoc={mcuInfo.mcuDoc} />);
+      const oLine = oMcuInfo.line[sKey]
+      jMcuDevices.push(<DocPanelMcuDevice key={oLine.line} oLine={oLine} oMcuDoc={oMcuInfoCache.oMcuDoc} />);
     });
   }
 

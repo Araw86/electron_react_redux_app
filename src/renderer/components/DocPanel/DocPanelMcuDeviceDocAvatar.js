@@ -47,10 +47,10 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
 
   const handleClick = async () => {
     if (sMxRepPathValid) {
-      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.displayName + '.pdf');
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneMcuDoc.sName + '.pdf');
       console.log('exec ')
       if (nStatus == -1) {
-        dispatch(addItemForDownload(oOneMcuDoc.displayName))
+        dispatch(addItemForDownload(oOneMcuDoc.sName))
       }
     } else {
       console.log('Missing path')
@@ -58,7 +58,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   };
 
   useMemo(() => {
-    const bDisplay = oOneMcuDoc.devices.find((sDevice) =>
+    const bDisplay = oOneMcuDoc.sDevice.find((sDevice) =>
       (sDevice.search(sDocFilterDevice.toUpperCase()) > -1)
     )
     if (bDisplay !== display) {
@@ -67,7 +67,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     }
 
     const bDownloaded = aDownloadQueue.findIndex((sDoc) =>
-      (sDoc === oOneMcuDoc.displayName)
+      (sDoc === oOneMcuDoc.sName)
     )
     if (bDownloaded > -1) {
       setDownload(true)
@@ -92,7 +92,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   let aChipContent = [];
   switch (sDocType) {
     case 'ds':
-      if (oOneMcuDoc.displayName.search("DB") < 0) {
+      if (oOneMcuDoc.sName.search("DB") < 0) {
         sAvatarText = 'DS'
         sAvatarLongText = 'Datasheet'
         color = deepOrange[700];
@@ -134,7 +134,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   }
 
   function createChipContent(oOneMcuDoc) {
-    return oOneMcuDoc.devices.map((sDeviceName) =>
+    return oOneMcuDoc.sDevice.map((sDeviceName) =>
       <Chip key={sDeviceName} label={sDeviceName} size="small" />
     )
   }
@@ -155,7 +155,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const handleRightClick = () => {
 
     setSnackbarOpen(true)
-    navigator.clipboard.writeText(oOneMcuDoc.path);
+    navigator.clipboard.writeText(oOneMcuDoc.sPath);
   }
 
   return (
@@ -187,9 +187,9 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
         >
           <Box sx={{ p: 2, border: '3px dashed', borderColor: color }}>
 
-            <Typography >{oOneMcuDoc.displayName} - {sAvatarLongText}</Typography>
-            <Typography variant="body2" >{oOneMcuDoc.title}</Typography>
-            <Typography variant="body2">Rev {oOneMcuDoc.versionNumber}</Typography>
+            <Typography >{oOneMcuDoc.sName} - {sAvatarLongText}</Typography>
+            <Typography variant="body2" >{oOneMcuDoc.sTitle}</Typography>
+            <Typography variant="body2">Rev {oOneMcuDoc.sVersion}</Typography>
 
 
             {bAssignDevice ? aChipContent : <Fragment></Fragment>}

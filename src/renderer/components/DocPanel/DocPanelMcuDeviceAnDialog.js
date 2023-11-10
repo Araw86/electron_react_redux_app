@@ -53,9 +53,9 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
     }, [])
     /*search over AN titles */
     aFilteredDoc = aLineAn.reduce((aFilteredDoc, oLineAn) => {
-      if ((oLineAn.title.toUpperCase()).search(sSearchValue.toUpperCase()) !== -1) {
-        if ((aFilteredDoc.length == 0) || !aFilteredDoc.includes(oLineAn.displayName)) {
-          aFilteredDoc.push(oLineAn.displayName)
+      if ((oLineAn.sTitle.toUpperCase()).search(sSearchValue.toUpperCase()) !== -1) {
+        if ((aFilteredDoc.length == 0) || !aFilteredDoc.includes(oLineAn.sName)) {
+          aFilteredDoc.push(oLineAn.sName)
         }
       }
       return aFilteredDoc;
@@ -114,10 +114,10 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
   const dispatch = useDispatch()
   const handleClick = async () => {
     if (sMxRepPathValid) {
-      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneDoc.displayName + '.pdf');
+      const nStatus = await ipcExeFile(sMxRepPathConf + '/' + oOneDoc.sName + '.pdf');
       console.log('exec ')
       if (nStatus == -1) {
-        dispatch(addItemForDownload(oOneDoc.displayName))
+        dispatch(addItemForDownload(oOneDoc.sName))
       }
     } else {
       console.log('Missing path')
@@ -126,7 +126,7 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
 
   useMemo(() => {
     const bDownloaded = aDownloadQueue.findIndex((sDoc) =>
-      (sDoc === oOneDoc.displayName)
+      (sDoc === oOneDoc.sName)
     )
     if (bDownloaded > -1) {
       setDownload(true)
@@ -145,7 +145,7 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
   const handleRightClick = () => {
 
     setSnackbarOpen(true)
-    navigator.clipboard.writeText(oOneDoc.path);
+    navigator.clipboard.writeText(oOneDoc.sPath);
   }
 
   return (
@@ -156,7 +156,7 @@ function DocPanelMcuDeviceAnDialogItem({ oOneDoc }) {
             {bDownload ? <CircularProgress size={20} /> : 'AN'}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText sx={{ wordWrap: 'break-word', }} primary={oOneDoc.displayName + ' ver:' + oOneDoc.versionNumber} secondary={oOneDoc.title} />
+        <ListItemText sx={{ wordWrap: 'break-word', }} primary={oOneDoc.sName + ' ver:' + oOneDoc.sVersion} secondary={oOneDoc.sTitle} />
       </ListItemButton>
       <Snackbar
         open={snackbarOpen}

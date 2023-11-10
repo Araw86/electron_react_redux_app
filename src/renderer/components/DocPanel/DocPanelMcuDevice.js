@@ -6,11 +6,11 @@ import DocPanelMcuDeviceAnDialog from './DocPanelMcuDeviceAnDialog';
 
 import DocPanelMcuDeviceDocAvatar from './DocPanelMcuDeviceDocAvatar';
 
-function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuDoc = [] }) {
+function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, oMcuDoc = [] }) {
   const docTypes = ['ds', 'rm', 'pm', 'es'];
   const jAvatars = docTypes.map((sDocType) => {
     return (
-      <DocPanelMcuDeviceDocAvatar key={sDocType} sDocType={sDocType} oLine={oLine} oMcuDoc={mcuDoc} />
+      <DocPanelMcuDeviceDocAvatar key={sDocType} sDocType={sDocType} oLine={oLine} oMcuDoc={oMcuDoc} />
     )
   });
   return (
@@ -23,7 +23,7 @@ function DocPanelMcuDevice({ oLine = { line: 'Unknown device', files: [] }, mcuD
           <Grid container spacing={1}>
             {/* <Stack direction="row" spacing={1}> */}
             {jAvatars}
-            <DocPanelMcuDeviceAnDialog oLine={oLine} oMcuDoc={mcuDoc} />
+            <DocPanelMcuDeviceAnDialog oLine={oLine} oMcuDoc={oMcuDoc} />
             {/* </Stack> */}
           </Grid>
         </CardContent>
