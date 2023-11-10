@@ -21,7 +21,6 @@ import { useFinderPath } from "./hooks/useFinderPath";
 import { useSqlCheckState } from "./hooks/useSqlCheckState";
 import { useDbCacheUpdate } from "./hooks/useDbCacheUpdate";
 import useConfigDb from "./hooks/useConfigDb";
-import useCheckMcuDocFilesOnDisc from "./hooks/useCheckMcuDocFilesOnDisc";
 
 
 function TabPanel(props) {
@@ -65,9 +64,6 @@ function AppWindows() {
 
   /* start db loading a cache update */
   useDbCacheUpdate();
-
-  /* check files present on disc*/
-  useCheckMcuDocFilesOnDisc();
 
   /* handkle download state changes */
   useDownload()

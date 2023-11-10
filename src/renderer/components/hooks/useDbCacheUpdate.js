@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcFileExists, ipcGetStore, ipcSetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
+import checkMcuDocFilesOnDisc from "../../utilities/checkMcuDocFilesOnDisc";
 
 /* the db cache need to be updated or created so we read the db file and update the cache */
 export function useDbCacheUpdate() {
@@ -18,6 +19,8 @@ export function useDbCacheUpdate() {
     return oConf.sCubemxfinderpath;
 
   });
+  const sMxRepPath = useSelector((state) => state.configurationReducer.sMxRepPath)
+  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
 
   const bLocatedSqlFile = useSelector((state) => state.configurationReducer.bLocatedSqlFile)
 
@@ -47,7 +50,8 @@ export function useDbCacheUpdate() {
     const aDbVersion = await ipcSqlQuery({ sSqlPath, sSqlQuery: sDbversionQuery })
     const nDbLastRefresh = aDbVersion[0].latest_data_refresh;
 
-    const oParsedSqlData = parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
+    let oParsedSqlData = parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll);
+    // let oParsedSqlData = JSON.parse(JSON.stringify(parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll))) //deep copy of object
     if (oParsedSqlData !== null) {
       console.log(oParsedSqlData)
       /* stiore the new db cache time */
@@ -55,7 +59,8 @@ export function useDbCacheUpdate() {
       /* store the new db cache data */
       await ipcSetStore('finderCacheStore', 'oMcuData', oParsedSqlData)
       /* send new db cache data to store */
-      dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData }))
+      oParsedSqlData.oMcuDoc = await checkMcuDocFilesOnDisc(oParsedSqlData.oMcuDoc, sMxRepPath) // check doc files on disc an thier creation date
+      dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData })) // send doc structure to redux
     }
   }
 
@@ -169,8 +174,8 @@ export function useDbCacheUpdate() {
   }
 
   useEffect(() => {
-    if (bCacheUpdate === true) {
+    if (bCacheUpdate === true && sMxRepPathValid === true) {
       readSqlData(dispatch);
     }
-  }, [dispatch, bCacheUpdate]);
+  }, [dispatch, bCacheUpdate, sMxRepPathValid]);
 }

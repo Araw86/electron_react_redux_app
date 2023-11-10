@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcAddStore, ipcGetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
+import checkMcuDocFilesOnDisc from "../../utilities/checkMcuDocFilesOnDisc";
 
 /**
  * check if we have stored db in cache. If not load the db db file. Or if the db file have newer version it will update the cache
@@ -11,6 +12,8 @@ export function useSqlCheckState() {
 
   const bLocatedSqlFile = useSelector((state) => state.configurationReducer.bLocatedSqlFile)
   const sCubemxfinderPath = useSelector((state) => state.configurationReducer.sCubemxfinderPath);
+  const sMxRepPath = useSelector((state) => state.configurationReducer.sMxRepPath)
+  const sMxRepPathValid = useSelector((state) => state.configurationReducer.sMxRepPathValid)
 
   const sqlVersionCheck = async () => {
     /* check db state */
@@ -35,8 +38,10 @@ export function useSqlCheckState() {
     } else {
       /* load cache */
       console.log('cache load')
-      const oMcuDataCache = await ipcGetStore('finderCacheStore', 'oMcuData')
+      let oMcuDataCache = await ipcGetStore('finderCacheStore', 'oMcuData')
+      // let oMcuDataCache = JSON.parse(JSON.stringify(await ipcGetStore('finderCacheStore', 'oMcuData'))) //deep copy of object
       console.log(oMcuDataCache)
+      oMcuDataCache.oMcuDoc = await checkMcuDocFilesOnDisc(oMcuDataCache.oMcuDoc, sMxRepPath) // check doc files on disc an thier creation date
       dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oMcuDataCache }))
 
     }
@@ -44,9 +49,9 @@ export function useSqlCheckState() {
   }
 
   useEffect(() => {
-    if (bLocatedSqlFile === true) {
+    if (bLocatedSqlFile === true && sMxRepPathValid === true) {
       sqlVersionCheck()
     }
-  }, [bLocatedSqlFile])
+  }, [bLocatedSqlFile, sMxRepPath])
 
 }
