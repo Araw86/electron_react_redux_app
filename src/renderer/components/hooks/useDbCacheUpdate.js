@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcFileExists, ipcGetStore, ipcSetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
 import checkMcuDocFilesOnDisc from "../../utilities/checkMcuDocFilesOnDisc";
+import mergeOldAndNewCaheDB from "../../utilities/mergeOldAndNewCaheDB";
 
 /* the db cache need to be updated or created so we read the db file and update the cache */
 export function useDbCacheUpdate() {
@@ -54,12 +55,21 @@ export function useDbCacheUpdate() {
     // let oParsedSqlData = JSON.parse(JSON.stringify(parseSqlFiles(aDeviceLine, aDocDs, aDocRm, aDocEs, aDocPm, aDocAn, aDocAll))) //deep copy of object
     if (oParsedSqlData !== null) {
       console.log(oParsedSqlData)
+      /* read last update time */
+      const nUpdateTime = await ipcGetStore('finderCacheStore', 'nUpdateTime');
+      await ipcSetStore('finderCacheStore', 'oMcuData', oParsedSqlData)
+
       /* stiore the new db cache time */
       await ipcSetStore('finderCacheStore', 'nUpdateTime', nDbLastRefresh)
       /* store the new db cache data */
       await ipcSetStore('finderCacheStore', 'oMcuData', oParsedSqlData)
       /* send new db cache data to store */
+      console.log('new cache created from sql database')
       oParsedSqlData.oMcuDoc = await checkMcuDocFilesOnDisc(oParsedSqlData.oMcuDoc, sMxRepPath) // check doc files on disc an thier creation date
+      /* check if this is new db or we can merge with ilder data info */
+      if (nUpdateTime !== null) {
+        mergeOldAndNewCaheDB()
+      }
       dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData })) // send doc structure to redux
     }
   }
