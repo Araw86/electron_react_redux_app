@@ -26,10 +26,10 @@ function DocPanel({ offsetWidth = 0 }) {
   let filteredLines = {};
   if (oMcuInfo !== null && oMcuInfoCache !== null) {
     if (sDocFilterDevice !== '') {
-      const aDevices = Object.keys(oMcuInfo.device);
+      const aDevices = Object.keys(oMcuInfoCache.oDevices);
       filteredLines = aDevices.reduce((oReducedLines, sDevice) => {
         if (sDevice.search(sDocFilterDevice.toUpperCase()) !== -1) {
-          oReducedLines[oMcuInfo.device[sDevice].line] = true;
+          oReducedLines[oMcuInfoCache.oDevices[sDevice].sDsGroup] = true;
         }
         return oReducedLines;
       }, {})
