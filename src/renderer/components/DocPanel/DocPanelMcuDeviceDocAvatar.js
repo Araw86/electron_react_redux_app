@@ -13,11 +13,14 @@ function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   //   return (oMcuDoc[oOneMcuDoc.file_id].type === sDocType)
   // }
   let jAvatars = [];
+  if (sDocType !== 'oDs') {
+    jAvatars = Object.keys(oLine[sDocType]).map((sDoc, iIndex, aDocs) => {
 
-  jAvatars = oLine[sDocType].map((sDoc, iIndex, aDocs) => {
-
-    return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 1 ? true : false} />);
-  })
+      return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 1 ? true : false} />);
+    })
+  } else {
+    jAvatars.push(<AvatarForOneDoc key={oLine.sName} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[oLine.sName]} bAssignDevice={false} />)
+  }
 
   return (
     <Fragment>
@@ -91,7 +94,7 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
   const open = Boolean(anchorEl);
   let aChipContent = [];
   switch (sDocType) {
-    case 'ds':
+    case 'oDs':
       if (oOneMcuDoc.sName.search("DB") < 0) {
         sAvatarText = 'DS'
         sAvatarLongText = 'Datasheet'
@@ -109,20 +112,20 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     //   sAvatarText = 'DB'
     //   color = indigo[700];
     //   break;
-    case 'rm':
+    case 'oRm':
       sAvatarText = 'RM'
       sAvatarLongText = 'Reference manual'
       color = lightBlue[700];
       hColor = lightBlue[900];
       aChipContent = createChipContent(oOneMcuDoc)
       break;
-    case 'pm':
+    case 'oPm':
       sAvatarText = 'PM'
       sAvatarLongText = 'Programming manual'
       color = lightGreen[700];
       hColor = lightGreen[900];
       break;
-    case 'es':
+    case 'oEs':
       sAvatarText = 'ES'
       sAvatarLongText = 'Errata sheet'
       color = red[700];

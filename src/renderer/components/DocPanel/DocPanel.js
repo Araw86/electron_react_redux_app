@@ -17,72 +17,33 @@ function DocPanel({ offsetWidth = 0 }) {
   const boxRef = useRef(null);
   const sDocFilterDevice = useSelector((state) => state.configurationReducer.sDocFilterDevice);
 
-
-  const oMcuInfo = useSelector((state) => state.configurationReducer.oSqlParsedData);
   const oMcuInfoCache = useSelector((state) => state.configurationReducer.oMcuDataCache);
 
 
   let jMcuDevices = [];
   let filteredLines = {};
-  if (oMcuInfo !== null && oMcuInfoCache !== null) {
+  if (oMcuInfoCache !== null) {
     if (sDocFilterDevice !== '') {
       const aDevices = Object.keys(oMcuInfoCache.oDevices);
       filteredLines = aDevices.reduce((oReducedLines, sDevice) => {
         if (sDevice.search(sDocFilterDevice.toUpperCase()) !== -1) {
-          oReducedLines[oMcuInfoCache.oDevices[sDevice].sDsGroup] = true;
+          const aDsGroupDevices = Object.keys(oMcuInfoCache.oDevices[sDevice].sDsGroup)
+          if (aDsGroupDevices.length !== 1) {
+            console.log('more ds devices in group')
+          }
+          oReducedLines[aDsGroupDevices[0]] = oMcuInfoCache.oDsGroup[aDsGroupDevices[0]]
+          // oReducedLines[oMcuInfoCache.oDsGroup[oMcuInfoCache.oDevices[sDevice].oName]] = true;
         }
         return oReducedLines;
       }, {})
     } else {
-      filteredLines = oMcuInfo.line;
+      filteredLines = oMcuInfoCache.oDsGroup;
     }
-
     Object.keys(filteredLines).forEach(sKey => {
-      const oLine = oMcuInfo.line[sKey]
-      jMcuDevices.push(<DocPanelMcuDevice key={oLine.line} oLine={oLine} oMcuDoc={oMcuInfoCache.oMcuDoc} />);
+      const oLine = oMcuInfoCache.oDsGroup[sKey]
+      jMcuDevices.push(<DocPanelMcuDevice key={oLine.sName} oLine={oLine} oMcuDoc={oMcuInfoCache.oMcuDoc} />);
     });
   }
-
-  // const [appBarSx, setAppBarSx] = useState({})
-  // useEffect(() => {
-  //   if ((boxRef.current !== null) && (boxRef.current.offsetLeft !== null)) {
-  //     // console.log(boxRef.current.offsetLeft)
-  //     setAppBarSx({ width: `calc(100% - ${boxRef.current.offsetLeft}px)`, ml: `${boxRef.current.offsetLeft}px` })
-  //   } else {
-  //     setAppBarSx({ width: '100%' })
-  //   }
-  // }, [boxRef.current])
-
-  // const [appBarSx, setAppBarSx] = useState({})
-  // const refCallback = useCallback((nodeValue) => {
-  //   if ((nodeValue !== null) && (nodeValue.offsetLeft !== null)) {
-  //     // console.log(boxRef.current.offsetLeft)
-  //     setAppBarSx({ width: `calc(100% - ${nodeValue.offsetLeft}px)`, ml: `${nodeValue.offsetLeft}px` })
-  //   } else {
-  //     setAppBarSx({ width: '100%' })
-  //   }
-  //   console.log('run callback')
-  // }, [boxRef])
-
-  // let appBarSx = {}
-  // if ((boxRef.current !== null) && (boxRef.current.offsetLeft !== null)) {
-  //   appBarSx = { width: `calc(100% - ${boxRef.current.offsetLeft}px)`, ml: `${boxRef.current.offsetLeft}px` }
-  // } else {
-  //   appBarSx = { width: '100%' }
-  // }
-  // console.log(boxRef)
-
-  // const [appBarSx, setAppBarSx] = useState({})
-  // useEffect(() => {
-  //   const observer = new ResizeObserver(entries => {
-  //     console.log(entries[0])
-  //     // setwidth(entries[0].contentRect.width)
-  //     // entries[0].target.offsetLeft
-  //     setAppBarSx({ width: `calc(100% - ${entries[0].target.offsetLeft}px)`, ml: `${entries[0].target.offsetLeft}px` })
-  //   })
-  //   observer.observe(boxRef.current)
-  //   return () => boxRef.current && observer.unobserve(boxRef.current)
-  // }, [])
 
   const appBarSx = { width: `calc(100% - ${offsetWidth}px)`, ml: `${offsetWidth}px` }
 

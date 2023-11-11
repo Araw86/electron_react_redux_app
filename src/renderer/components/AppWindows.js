@@ -50,8 +50,8 @@ function AppWindows() {
 
   useConfig();
 
-  /* check if database path is valid */
-  useDatabasePath();
+  // /* check if database path is valid */
+  // useDatabasePath();// replaced with cache
 
   /* check if repo path is valid */
   useRepoPath();

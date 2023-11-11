@@ -35,9 +35,10 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   // console.log(oMcuDoc)
 
   const aLineAn = useMemo(() => {
-    return oLine.an.map((sAnName) => {
+    return Object.keys(oLine.oAn).map((sAnName) => {
       return oMcuDoc[sAnName]
     })
+    // return Object.keys(oLine.oAn)
   }
     , []
   );
@@ -45,7 +46,7 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
   let aFilteredDoc = []
   if (sSearchValue !== '') {
     /* search over AN names */
-    aFilteredDoc = oLine.an.reduce((aFilteredDoc, sDoc) => {
+    aFilteredDoc = Object.keys(oLine.oAn).reduce((aFilteredDoc, sDoc) => {
       if (sDoc.search(sSearchValue.toUpperCase()) !== -1) {
         aFilteredDoc.push(sDoc)
       }
@@ -61,7 +62,7 @@ export default function DocPanelMcuDeviceAnDialog({ oLine, oMcuDoc }) {
       return aFilteredDoc;
     }, aFilteredDoc)
   } else {
-    aFilteredDoc = oLine.an;
+    aFilteredDoc = Object.keys(oLine.oAn);
   }
   // const aDocuments = [];
   const aDocuments = aFilteredDoc.map((sDoc) => {
