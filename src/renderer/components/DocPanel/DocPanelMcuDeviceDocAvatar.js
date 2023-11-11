@@ -1,10 +1,11 @@
-import { Alert, Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Snackbar, Typography } from '@mui/material';
+import { Alert, Avatar, Chip, CircularProgress, Grid, Paper, Popover, Popper, Snackbar, Typography, Badge, Tooltip } from '@mui/material';
 import { deepOrange, indigo, lightBlue, lightGreen, red } from '@mui/material/colors';
 import { Box } from '@mui/system';
 import React, { Fragment, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemForDownload } from '../../redux/downloadSlice';
 import { ipcExeFile } from '../../utilities/ipcFunctions';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   // const aDoc = oLine.files.filter(filterDocumentation)
@@ -15,8 +16,7 @@ function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   let jAvatars = [];
   if (sDocType !== 'oDs') {
     jAvatars = Object.keys(oLine[sDocType]).map((sDoc, iIndex, aDocs) => {
-      console.log(aDocs)
-      return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 0 ? true : false} />);
+      return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 1 ? true : false} />);
     })
   } else {
     jAvatars.push(<AvatarForOneDoc key={oLine.sName} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[oLine.sName]} bAssignDevice={true} />)
@@ -149,27 +149,38 @@ function AvatarForOneDoc({ sDocType, oLine, oOneMcuDoc, bAssignDevice }) {
     setAnchorEl(null);
   };
 
-
-
-
-
-
-
   const handleRightClick = () => {
 
     setSnackbarOpen(true)
     navigator.clipboard.writeText(oOneMcuDoc.sPath);
   }
 
+  const bPresentOnDisc = (oOneMcuDoc.dFileStat !== null)
+
+  const oAvatar = (<Avatar sx={{
+    bgcolor: color, ':hover': {
+      bgcolor: hColor
+    }
+  }} onClick={handleClick} onContextMenu={handleRightClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
+    {bDownload ? <CircularProgress size={20} /> : sAvatarText}
+  </Avatar>)
+
+  const oBadgeContent = (
+    <Badge color="error" overlap="circular"
+      badgeContent={
+        <Tooltip title="File not present on disc">
+          <Box>
+            X
+          </Box>
+          {/* <ClearIcon fontSize='small' /> */}
+        </Tooltip>
+      } children={oAvatar} />
+  )
   return (
     <Fragment >
       <Grid item>
-
-        <Avatar sx={{
-          bgcolor: color, ':hover': {
-            bgcolor: hColor
-          }
-        }} onClick={handleClick} onContextMenu={handleRightClick} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>{bDownload ? <CircularProgress size={20} /> : sAvatarText}</Avatar>
+        {bPresentOnDisc ? oAvatar : oBadgeContent}
+        {/* {oAvatar} */}
         <Popover
           id="mouse-over-popover"
           sx={{
