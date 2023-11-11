@@ -43,9 +43,10 @@ function ipcHandlers() {
   });
 
   ipcMain.handle('docFiles', (event, data) => {
+    console.log(data)
     switch (data.type) {
       case 0:
-        return docDetailsCheck.checkPdfMetaDate(data.data)
+        return docDetailsCheck.checkFileStatDate(data.data)
       case 1:
         return docDetailsCheck.checkPdfMetaDate(data.data)
       default:

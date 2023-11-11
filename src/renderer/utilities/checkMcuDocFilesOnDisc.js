@@ -21,7 +21,7 @@ async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
     for (let i = 0; i < aMcuDoc.length; i++) {
       const sMcuDoc = aMcuDoc[i]
       let oOneMcuDoc = oMcuDoc[sMcuDoc]
-      const dFileStatDate = await ipcDocFilesStat(sMxRepPath + sMcuDoc)
+      const dFileStatDate = await ipcDocFilesStat(sMxRepPath + sMcuDoc + '.pdf')
       oMcuDocStat[sMcuDoc] = {}
       oMcuDocStat[sMcuDoc].dFileStatNew = dFileStatDate
       // console.log(oOneMcuDoc)
@@ -41,6 +41,7 @@ async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
           }
         } else {
           //check meta value if possible
+          oOneMcuDoc.dFileStat = dFileStatDate // store new time
         }
       } else {
         // else no file present so no stat and meta
@@ -54,6 +55,7 @@ async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
     //check missing files
 
     //check file times with cache
+    console.log(oMcuDoc)
     return oMcuDoc
   }
 

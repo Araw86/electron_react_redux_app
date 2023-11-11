@@ -2428,7 +2428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xmldom/xmldom@npm:^0.8.8":
+"@xmldom/xmldom@npm:^0.8.7":
   version: 0.8.10
   resolution: "@xmldom/xmldom@npm:0.8.10"
   checksum: 4c136aec31fb3b49aaa53b6fcbfe524d02a1dc0d8e17ee35bd3bf35e9ce1344560481cd1efd086ad1a4821541482528672306d5e37cdbd187f33d7fadd3e2cf0
@@ -3934,7 +3934,7 @@ __metadata:
     electron-updater: ^5.3.0
     eslint-plugin-react-hooks: ^4.6.0
     html-webpack-plugin: ^5.5.0
-    pdf2json: ^3.0.5
+    pdf2json: ~2.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-redux: ^8.0.5
@@ -6040,14 +6040,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdf2json@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "pdf2json@npm:3.0.5"
+"pdf2json@npm:~2.0.1":
+  version: 2.0.2
+  resolution: "pdf2json@npm:2.0.2"
   dependencies:
-    "@xmldom/xmldom": ^0.8.8
+    "@xmldom/xmldom": ^0.8.7
   bin:
-    pdf2json: bin/pdf2json.js
-  checksum: eec8004a88af35790bb1cfdd581d9f09e762703f7c89d06595793a9f98315c4e052f23c7657715ccd165b6fa03f5c27ee22e55a4118cf39a3415ebb545b33cb3
+    pdf2json: bin/pdf2json
+  checksum: 56c5f91530e9770d9b297750b78b857458c5f3a915858fa65d4353fa5a11782d76734c93d678ca5d9cfc142ae300add6ab59a874a319f807892dc73177157177
   languageName: node
   linkType: hard
 
