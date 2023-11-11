@@ -15,11 +15,11 @@ function DocPanelMcuDeviceDocAvatar({ sDocType, oLine, oMcuDoc }) {
   let jAvatars = [];
   if (sDocType !== 'oDs') {
     jAvatars = Object.keys(oLine[sDocType]).map((sDoc, iIndex, aDocs) => {
-
-      return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 1 ? true : false} />);
+      console.log(aDocs)
+      return (<AvatarForOneDoc key={sDoc} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[sDoc]} bAssignDevice={aDocs.length > 0 ? true : false} />);
     })
   } else {
-    jAvatars.push(<AvatarForOneDoc key={oLine.sName} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[oLine.sName]} bAssignDevice={false} />)
+    jAvatars.push(<AvatarForOneDoc key={oLine.sName} sDocType={sDocType} oLine={oLine} oOneMcuDoc={oMcuDoc[oLine.sName]} bAssignDevice={true} />)
   }
 
   return (
