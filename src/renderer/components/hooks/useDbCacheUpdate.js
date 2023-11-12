@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { dispatchStateProp } from "../../redux/configurationSlice";
 import { ipcFileExists, ipcGetStore, ipcSetStore, ipcSqlQuery } from "../../utilities/ipcFunctions";
 import checkMcuDocFilesOnDisc from "../../utilities/checkMcuDocFilesOnDisc";
-import mergeOldAndNewCaheDB from "../../utilities/mergeOldAndNewCaheDB";
+import mergeOldAndNewCacheDbMcuDoc from "../../utilities/mergeOldAndNewCacheDbMcuDoc";
 
 /* the db cache need to be updated or created so we read the db file and update the cache */
 export function useDbCacheUpdate() {
@@ -68,7 +68,7 @@ export function useDbCacheUpdate() {
       oParsedSqlData.oMcuDoc = await checkMcuDocFilesOnDisc(oParsedSqlData.oMcuDoc, sMxRepPath) // check doc files on disc an thier creation date
       /* check if this is new db or we can merge with ilder data info */
       if (nUpdateTime !== null) {
-        mergeOldAndNewCaheDB()
+        mergeOldAndNewCacheDbMcuDoc()
       }
       dispatch(dispatchStateProp({ sProp: 'oMcuDataCache', oValue: oParsedSqlData })) // send doc structure to redux
     }

@@ -43,7 +43,6 @@ function ipcHandlers() {
   });
 
   ipcMain.handle('docFiles', (event, data) => {
-    console.log(data)
     switch (data.type) {
       case 0:
         return docDetailsCheck.checkFileStatDate(data.data)

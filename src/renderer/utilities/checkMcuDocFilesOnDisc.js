@@ -28,7 +28,7 @@ async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
       //doc dont have previous store info, so it was not on disc before
       if (!oOneMcuDoc.hasOwnProperty('dFileStat')) {
         oOneMcuDoc.dFileStat = null //add stat property to object
-        oOneMcuDoc.dFileMeta = null ///add property for meta data
+        oOneMcuDoc.nFileMeta = null ///add property for meta data
       }
       //the doc is on disc
       if (dFileStatDate !== null) {
@@ -46,7 +46,7 @@ async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
       } else {
         // else no file present so no stat and meta
         oOneMcuDoc.dFileStat = null //add stat property to object
-        oOneMcuDoc.dFileMeta = null ///add property for meta data
+        oOneMcuDoc.nFileMeta = null ///add property for meta data
       }
       oMcuDoc[sMcuDoc] = oOneMcuDoc
     }
