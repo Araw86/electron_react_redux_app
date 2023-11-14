@@ -42,9 +42,24 @@ function docVersionCheck(oMcuDocs) {
 
 
 
+/**
+ * Function add new version into aDocVersions. newest revision is from 0
+ * @param {object} oMcuDoc - doc object
+ * @param {string} sVersion -file version
+ * @param {number} nFileMeta - timestamp of file creation 
+ * @returns 
+ */
 
 function docVersionAdd(oMcuDoc, sVersion, nFileMeta) {
+  const oNewDocVersion = { sDocVersion: sVersion, nDocVersionCreation: nFileMeta }
+  for (let i; i < oMcuDoc.aDocVersions.lenght; i++) {
+    if (oMcuDoc.aDocVersions[i] < nFileMeta) {
+      oMcuDoc.aDocVersions.splice(i, 0, oNewDocVersion)
+      break;
+    }
+  }
 
+  return oMcuDoc
 }
 
 export default docVersionCheck
