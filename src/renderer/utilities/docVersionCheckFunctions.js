@@ -62,4 +62,4 @@ function docVersionAdd(oMcuDoc, sVersion, nFileMeta) {
   return oMcuDoc
 }
 
-export default docVersionCheck
+export default { docVersionAdd, docVersionCheck }
