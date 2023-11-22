@@ -31,27 +31,6 @@ export function useDownload() {
       }
     }
   }, [sDownloading, sMxRepPathValid, iDownloadState, dispatch])
-  useEffect(() => {
-
-    // ipc_handlers.ipcToRendererDownload((event, value) => {
-    //   const { type, error } = value
-    //   switch (type) {
-    //     /*donwload complete*/
-    //     case 0:
-    //       console.log('downloaded ' + sDownloading)
-    //       dispatch(itemDownloaded())
-    //       break;
-    //     /*download error, close the file */
-    //     case 1:
-    //       dispatch(itemDownloadError())
-    //       break;
-    //     default:
-    //       console.log('error undefined siwtch')
-    //       alert('error undefined siwtch')
-    //       break;
-    //   }
-    // })
-  }, [])
 
   /* download callback from main */
   ipc_handlers.ipcToRendererDownload((event, value) => {
