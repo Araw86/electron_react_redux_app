@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { ipcDocFilesStat, ipcDocFilesMeta } from "./ipcFunctions";
 
 /**
- * hook to check the files on disc
+ * function to check the files on disc
  */
 async function checkMcuDocFilesOnDisc(oMcuDocIn, sMxRepPath) {
 

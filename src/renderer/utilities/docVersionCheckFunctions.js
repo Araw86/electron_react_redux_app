@@ -1,3 +1,12 @@
+/**
+ * oMcuDoc property  aDocVersions is an array of objects
+ * { sDocVersion: sVersion, nDocVersionCreation: nFileMeta }
+ * object property is version sDocVersion 
+ * and nDocVersionCreation is creation data of the file to be able recognize the files and thier versions
+ * i was not ablew to get any other solution how to detect the pdf version only the creation time
+ * 
+ */
+
 
 /**
  * function check if we have current version in aDocVersions array if yes we check if the version is valid if not we update it
@@ -31,6 +40,8 @@ function docVersionIndex(sDocVersion, oMcuDoc) {
     if (nVersionIndex !== undefined) {
       return nVersionIndex
     }
+  } else {
+    console.log('this doc has no version info')
   }
 
   return null
@@ -61,5 +72,17 @@ function docVersionAdd(oMcuDoc, sVersion, nFileMeta) {
 
   return oMcuDoc
 }
+/**
+ * Function will copy the aDocVersions from old doc to new doc
+ * @param {object} oOldMcuDoc - old mcu doc object 
+ * @param {object} oNewMcuDoc - new mcu doc obect
+ * @returns 
+ */
+function docVersionMerge(oOldMcuDoc, oNewMcuDoc) {
 
-export default { docVersionAdd, docVersionCheck }
+  if (oMcuDoc.hasOwnPropery('aDocVersions')) {
+    oNewMcuDoc.aDocVersions = oOldMcuDoc.aDocVersions;
+  }
+  return oNewMcuDoc;
+}
+export default { docVersionAdd, docVersionCheck, docVersionMerge }
