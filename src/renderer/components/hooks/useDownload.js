@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { itemDownloaded, itemDownloadError, startDownload } from "../../redux/downloadSlice";
+import manageDownloadedFile from "../../utilities/manageDownloadedFile";
 
 
 export function useDownload() {
@@ -39,6 +40,7 @@ export function useDownload() {
       /*donwload complete*/
       case 0:
         console.log('downloaded ' + sDownloading)
+        manageDownloadedFile(sMxRepPath, sDownloading)
         dispatch(itemDownloaded())
         break;
       /*download error, close the file */

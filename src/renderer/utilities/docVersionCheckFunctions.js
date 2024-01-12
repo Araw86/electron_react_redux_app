@@ -64,7 +64,7 @@ function docVersionCheck(oMcuDocs) {
 function docVersionAdd(oMcuDoc, sVersion, nFileMeta) {
   const oNewDocVersion = { sDocVersion: sVersion, nDocVersionCreation: nFileMeta }
   for (let i; i < oMcuDoc.aDocVersions.lenght; i++) {
-    if (oMcuDoc.aDocVersions[i] < nFileMeta) {
+    if (oMcuDoc.aDocVersions[i].nDocVersionCreation < nFileMeta) {
       oMcuDoc.aDocVersions.splice(i, 0, oNewDocVersion)
       break;
     }
